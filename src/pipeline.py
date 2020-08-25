@@ -67,17 +67,17 @@ class ImageManipulation(object):
         '''
         saves images as a numpy array and saves to data directory
         '''
-        image_matrix = []
+        image_final = []
         for image in self.image_resized:
-            image_matrix.append(np.array(image))
-        image_vector = np.ravel(image_matrix)
-        np.save(self.pose, image_vector)
+            image_matrix = np.array(image)
+            image_vector = np.ravel(image_matrix)
+            image_final.append(image_vector)
+        np.save(self.pose, image_final)
         print(f'Images saved as: {self.pose}.npy')
-        return self
-
+        return self 
 
 if __name__ == "__main__":
-    poses = ['downdog', 'mountain']
+    poses = ['downdog','mountain']
 
     for pose in poses:
         path = f'../data/{pose}.txt'
@@ -85,6 +85,7 @@ if __name__ == "__main__":
         process.greyscale()
         process.resize()
         process.save_images()
+        #print(final)
 
     
     
