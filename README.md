@@ -50,15 +50,15 @@ What about edge detection? Since we're working with shapes, maybe looking at the
 Sobel Filter:
 
 <p float="middle">
-    <img src="images/avg_sobel_downdog.png" width="350" />
-    <img src="images/avg_sobel_mountain.png" width="350" /> 
+    <img src="images/avg_sobel_downdog.png" width="400" />
+    <img src="images/avg_sobel_mountain.png" width="400" /> 
 </p>
 
 
 Canny Filter: 
 
 <p float="middle">
-    <img src="images/avg_canny_downdog.png" width="350" />
-    <img src="images/avg_canny_mountain.png" width="350" /> 
+    <img src="images/avg_canny_downdog.png" width="400" />
+    <img src="images/avg_canny_mountain.png" width="400" /> 
 </p>
 
