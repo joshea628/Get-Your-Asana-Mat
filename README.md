@@ -61,3 +61,4 @@ Canny Filter:
     <img src="images/avg_canny_downdog.png" width="350" />
     <img src="images/avg_canny_mountain.png" width="350" /> 
 </p>
+
