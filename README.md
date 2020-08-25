@@ -29,8 +29,8 @@ In order to get a feel for the data and for how the models I plan to use would w
 The first thing I did was take a look at the mean pixel intensities for each of the first two classes. 
 
 <p float="middle">
-    <img src="images/avg_pixel_intensity_downdog.png" width="350" />
-    <img src="images/avg_pixel_intensity_mountain.png" width="350" /> 
+    <img src="images/avg_pixel_intensity_downdog.png" width="500" />
+    <img src="images/avg_pixel_intensity_mountain.png" width="500" /> 
 </p>
 
 The downdog image looks a bit like a two-humped camel, but the general shape seems pretty decent. Mountain pose makes me feel a little uneasy with the slight creepyness, but it seems very clear and will hopefully do well in the model. 
@@ -38,8 +38,8 @@ The downdog image looks a bit like a two-humped camel, but the general shape see
 Next, I created histograms for the Frequency of the pixel intensities for each model. This shows how light and dark each image is, and how defined the shapes are: 
 
 <p float="middle">
-    <img src="images/avg_histogram_downdog.png" width="350" />
-    <img src="images/avg_histogram_mountain.png" width="350" /> 
+    <img src="images/avg_histogram_downdog.png" width="500" />
+    <img src="images/avg_histogram_mountain.png" width="500" /> 
 </p>
 
 
@@ -50,15 +50,15 @@ What about edge detection? Since we're working with shapes, maybe looking at the
 Sobel Filter:
 
 <p float="middle">
-    <img src="images/avg_sobel_downdog.png" width="400" />
-    <img src="images/avg_sobel_mountain.png" width="400" /> 
+    <img src="images/avg_sobel_downdog.png" width="500" />
+    <img src="images/avg_sobel_mountain.png" width="500" /> 
 </p>
 
 
 Canny Filter: 
 
 <p float="middle">
-    <img src="images/avg_canny_downdog.png" width="400" />
-    <img src="images/avg_canny_mountain.png" width="400" /> 
+    <img src="images/avg_canny_downdog.png" width="500" />
+    <img src="images/avg_canny_mountain.png" width="500" /> 
 </p>
 
