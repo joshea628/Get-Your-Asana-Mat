@@ -19,7 +19,7 @@ def display_image(image, ax, title, square_size=43):
     '''
     display = image.reshape(square_size,square_size)
     ax.imshow(display,cmap='gray')
-    ax.set_title(title, fontsize=16)
+    ax.set_title(title, fontsize=24)
     ax.set_axis_off()
     return ax
 
@@ -35,6 +35,7 @@ def avg_pixel_intensity(data, classname):
     fig, ax = plt.subplots(1)
     display_image(avg_image, ax, title)
     plt.savefig(f'../images/avg_pixel_intensity_{classname}.png')
+
     return ax
 
 def histograms_of_pixel_intensities(data, classname):
@@ -48,9 +49,9 @@ def histograms_of_pixel_intensities(data, classname):
     avg_image = data.mean(axis=0)
     fig, ax = plt.subplots(1,figsize=(6,6))
     ax.hist(avg_image)
-    ax.set_xlabel('Pixel Intensities', fontsize=14)
-    ax.set_ylabel('Frequency in Image', fontsize=14)
-    ax.set_title(f'Average {classname} Histogram', fontsize=16)
+    ax.set_xlabel('Pixel Intensities', fontsize=18)
+    ax.set_ylabel('Frequency in Image', fontsize=18)
+    ax.set_title(f'Average {classname} Histogram', fontsize=24)
     plt.savefig(f'../images/avg_histogram_{classname}.png')
     return ax
 

@@ -30,8 +30,8 @@ The first thing I did was take a look at the mean pixel intensities for each of 
 
 <div align="center">
 <p float="middle">
-    <img src="images/avg_pixel_intensity_downdog.png" width="500" />
-    <img src="images/avg_pixel_intensity_mountain.png" width="500" /> 
+    <img src="images/avg_pixel_intensity_downdog.png" width="600" />
+    <img src="images/avg_pixel_intensity_mountain.png" width="600" /> 
 </p>
 
 <div align="left">
@@ -41,8 +41,8 @@ Next, I created histograms for the Frequency of the pixel intensities for each m
 
 <div align="center">
 <p float="middle">
-    <img src="images/avg_histogram_downdog.png" width="500" />
-    <img src="images/avg_histogram_mountain.png" width="500" /> 
+    <img src="images/avg_histogram_downdog.png" width="600" />
+    <img src="images/avg_histogram_mountain.png" width="600" /> 
 </p>
 
 <div align="left">
@@ -54,8 +54,8 @@ Sobel Filter:
 
 <div align="center">
 <p float="middle">
-    <img src="images/avg_sobel_downdog.png" width="500" />
-    <img src="images/avg_sobel_mountain.png" width="500" /> 
+    <img src="images/avg_sobel_downdog.png" width="600" />
+    <img src="images/avg_sobel_mountain.png" width="600" /> 
 </p>
 
 <div align="left">
@@ -63,39 +63,44 @@ Canny Filter:
 
 <div align="center">
 <p float="middle">
-    <img src="images/avg_canny_downdog.png" width="500" />
-    <img src="images/avg_canny_mountain.png" width="500" /> 
+    <img src="images/avg_canny_downdog.png" width="600" />
+    <img src="images/avg_canny_mountain.png" width="600" /> 
 </p>
 
-## Logistic Regression
 <div align="left">
+
+## Logistic Regression
+
 Based on the featurization above, I decided to use the Canny filter in the Logistic Regression since the images were so different from eachother. 
 
 Since images have so many features (these images are 43x43 pixels), I then used Principal Component Analysis to consolidate down to two features before cross validating. I also wanted to look at using 3 features to see how that would affect the model accuracy.
 
 <div align="center">
 <p float="middle">
-    <img src="images/PCA_plot_2.png" width="500" />
-    <img src="images/PCA_plot_3.png" width="500" /> 
+    <img src="images/PCA_plot_2.png" width="600" />
+    <img src="images/PCA_plot_3.png" width="600" /> 
 </p>
 <div align="left">
 I used k-folds cross validation with 5 folds and a probability threshold of 0.75 in order to be classified as Mountain Pose. I chose a 0.75 threshold because mountain pose has a much more distinct image as seen in the mean image pixel intensity above.
 
 During cross validation:
-The 2 component PCA-vectorized data resulted in a training accuracy was 0.711 and a test accuracy was 0.710
+The 2 component PCA-vectorized data resulted in a training accuracy was 0.781 and a test accuracy was 0.771
 
-The 3 component PCA-vectorized data resulted in a training accuracy of 0.737 and a test accuracy of 0.742.
+The 3 component PCA-vectorized data resulted in a training accuracy of 0.772 and a test accuracy of 0.773.
 
 ROC Curves with 2 and 3 features:
 
 <div align="center">
 <p float="middle">
-    <img src="images/roccurve_2.png" width="500" />
-    <img src="images/roccurve_3.png" width="500" /> 
+    <img src="images/roccurve_2.png" width="600" />
+    <img src="images/roccurve_3.png" width="600" /> 
 </p>
+
+<div align="left">
 
 Confusion Matrix with 3 features:
 
 <div align="center">
+
 ![](images/confusion_matrix_3.png)
 

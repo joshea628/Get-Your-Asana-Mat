@@ -16,18 +16,27 @@ def two_dim_pca(X, y):
     fig, ax = plt.subplots(1)
     ax.set_xlabel('Principal Component 1', fontsize = 15)
     ax.set_ylabel('Principal Component 2', fontsize = 15)
-    ax.set_title('PCA with 2 Components', fontsize = 20)
+    ax.set_title('PCA with 2 Components', fontsize = 24)
     ax.scatter(X[:,0], X[:,1], c=y,cmap='bwr_r')
     plt.savefig('../images/PCA_plot_2.png')
 
 def three_dim_pca(X, y):
-    fig = plt.figure()
+    fig = plt.figure(figsize=(10,12))
     ax = fig.add_subplot(111, projection='3d')
     ax.set_xlabel('Principal Component 1', fontsize = 15)
     ax.set_ylabel('Principal Component 2', fontsize = 15)
     ax.set_zlabel('Principal Component 3', fontsize = 15)
-    ax.set_title('PCA with 3 Components', fontsize = 20)
+    ax.set_title('PCA with 3 Components', fontsize = 24)
     ax.scatter(X[:,0], X[:,1], X[:,2], c=y,cmap='bwr_r')
+    ax.xaxis.set_ticklabels([])
+    ax.yaxis.set_ticklabels([])
+    ax.zaxis.set_ticklabels([])
+    for line in ax.xaxis.get_ticklines():
+        line.set_visible(False)
+    for line in ax.yaxis.get_ticklines():
+        line.set_visible(False)
+    for line in ax.zaxis.get_ticklines():
+        line.set_visible(False)
     plt.savefig('../images/PCA_plot_3.png')
 
 def crossVal(X, y, k, threshold=0.75):
@@ -64,7 +73,7 @@ def we_will_roc_you(X,y):
     ax.plot(x, x, linestyle='--', color ='black', label='Random Guess')
     ax.set_xlabel('False Positive Rate (FPR)', fontsize=16)
     ax.set_ylabel('True Positive Rate (TPR)', fontsize=16)
-    ax.set_title('ROC Curve with 3 Features', fontsize=18)
+    ax.set_title('ROC Curve with 3 Features', fontsize=24)
     plt.legend()
     plt.savefig('../images/roccurve_3.png',  bbox_inches='tight')
     return thresholds[fpr>0.2][0]
