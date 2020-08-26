@@ -1,5 +1,11 @@
 # Get Your Asana Mat
 
+<div align="center">
+<p float="middle">
+    <img src="images/jen_scorp.JPG" width="600" />
+</p>
+<div align="left">
+
 ## Background and Motivation
 
 Yoga has been a huge part of my life, it's something that grounds me and has made me a more patient person. When thinking about project ideas, I wanted to do something that applied to my life in some way. While I'm not usually wondering which pose I am doing, I thought it could be super useful for people learning yoga. 
