@@ -60,7 +60,8 @@ class ImageManipulation(object):
         resizes image to resolution input
         '''
         for image in self.image_grey:
-            self.image_resized.append(image.resize((self.resolution,self.resolution)))
+            self.image_resized.append(image.resize((self.resolution,
+                                                     self.resolution)))
         return self
 
     def save_images(self):
@@ -85,7 +86,7 @@ if __name__ == "__main__":
         process.greyscale()
         process.resize()
         process.save_images()
-        #print(final)
+        
 
     
     

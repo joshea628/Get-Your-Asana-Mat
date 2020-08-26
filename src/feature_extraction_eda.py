@@ -13,7 +13,8 @@ def display_image(image, ax, title, square_size=43):
     '''
     Reshapes image vectors into array and displays the image in greyscale
 
-    input: image, axis, title of graph, size to reshape image (should match original resize number in pipeline)
+    input: image, axis, title of graph, size to reshape image (should match 
+    original resize number in pipeline)
     output: image
     '''
     display = image.reshape(square_size,square_size)
@@ -38,7 +39,8 @@ def avg_pixel_intensity(data, classname):
 
 def histograms_of_pixel_intensities(data, classname):
     '''
-    Creates a histogram of pixel intensities for the average image of a class
+    Creates a histogram of pixel intensities for the average image of a 
+    class
 
     input: image vectors in an array, pose name
     output: histogram of the average pixel intensity of entire class
@@ -54,21 +56,29 @@ def histograms_of_pixel_intensities(data, classname):
 
 def apply_filter(data, classname, img_filter=sobel,square_size=43):
     '''
-    Creates an image using edge detection from either the Sobel or Canny filter
+    Creates an image using edge detection from either the Sobel or Canny 
+    filter
 
     input: image vectors in an array, pose name, filter, resize
     output: filtered image of the average pixel intensity of entire class
     '''
     avg_image = data.mean(axis=0)
     shaped_avg_image = avg_image.reshape(square_size,square_size)
-    filter_image = img_filter(shaped_avg_image, sigma=4) #un comment for canny filter
+    filter_image = img_filter(shaped_avg_image, sigma=4) #uncomment for canny
     fig, ax = plt.subplots(1)
     title = f'{classname} With Canny Filter'
     display_image(filter_image, ax, title)
     plt.savefig(f'../images/avg_canny_{classname}.png')
     return ax
 
-def flatten_and_save_canny(data, classname, square_size=43):
+def flatten_and_save_canny(data, square_size=43):
+    '''
+    applies the canny filter to each image in the dataset, and vectorizes 
+    each picture into one line.
+
+    input: data set of images as vector arrays
+    output: canny images as vector arrays
+    '''
     canny_images = []
     for image in data:
         shaped_image = image.reshape(square_size, square_size)
@@ -78,22 +88,16 @@ def flatten_and_save_canny(data, classname, square_size=43):
         canny_images.append(flattened_filtered)
     return canny_images
 
-
 if __name__ == '__main__':
     poses = ['downdog','mountain']
     canny_data = []
     for pose in poses:
         filepath = f'../data/{pose}.npy'
         data = np.load(filepath)
-        #avg_pixel_intensity(data, pose)
-        #histograms_of_pixel_intensities(data, pose)
-        #apply_filter(data, pose, img_filter=canny)
+        avg_pixel_intensity(data, pose)
+        histograms_of_pixel_intensities(data, pose)
+        apply_filter(data, pose, img_filter=canny)
         #plt.show()
-    downdog_data = np.load('../data/downdog.npy')
-    canny_downdog = flatten_and_save_canny(downdog_data, pose)
-    mountain_data = np.load('../data/mountain.npy')
-    canny_mountain = flatten_and_save_canny(mountain_data, pose)
+        
     
-    
-    print(canny_mountain)
 
