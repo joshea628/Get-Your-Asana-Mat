@@ -30,8 +30,8 @@ The first thing I did was take a look at the mean pixel intensities for each of 
 
 <div align="center">
 <p float="middle">
-    <img src="images/avg_pixel_intensity_downdog.png" width="400" />
-    <img src="images/avg_pixel_intensity_mountain.png" width="400" /> 
+    <img src="images/avg_pixel_intensity_downdog.png" width="500" />
+    <img src="images/avg_pixel_intensity_mountain.png" width="500" /> 
 </p>
 
 <div align="left">
@@ -41,8 +41,8 @@ Next, I created histograms for the Frequency of the pixel intensities for each m
 
 <div align="center">
 <p float="middle">
-    <img src="images/avg_histogram_downdog.png" width="400" />
-    <img src="images/avg_histogram_mountain.png" width="400" /> 
+    <img src="images/avg_histogram_downdog.png" width="500" />
+    <img src="images/avg_histogram_mountain.png" width="500" /> 
 </p>
 
 <div align="left">
@@ -54,17 +54,17 @@ Sobel Filter:
 
 <div align="center">
 <p float="middle">
-    <img src="images/avg_sobel_downdog.png" width="400" />
-    <img src="images/avg_sobel_mountain.png" width="400" /> 
+    <img src="images/avg_sobel_downdog.png" width="500" />
+    <img src="images/avg_sobel_mountain.png" width="500" /> 
 </p>
 
-
+<div align="left">
 Canny Filter: 
 
 <div align="center">
 <p float="middle">
-    <img src="images/avg_canny_downdog.png" width="400" />
-    <img src="images/avg_canny_mountain.png" width="400" /> 
+    <img src="images/avg_canny_downdog.png" width="500" />
+    <img src="images/avg_canny_mountain.png" width="500" /> 
 </p>
 
 ## Logistic Regression
@@ -75,8 +75,8 @@ Since images have so many features (these images are 43x43 pixels), I then used 
 
 <div align="center">
 <p float="middle">
-    <img src="images/PCA_plot_2.png" width="400" />
-    <img src="images/PCA_plot_3.png" width="400" /> 
+    <img src="images/PCA_plot_2.png" width="500" />
+    <img src="images/PCA_plot_3.png" width="500" /> 
 </p>
 <div align="left">
 I used k-folds cross validation with 5 folds and a probability threshold of 0.75 in order to be classified as Mountain Pose. I chose a 0.75 threshold because mountain pose has a much more distinct image as seen in the mean image pixel intensity above.
@@ -90,8 +90,8 @@ ROC Curves with 2 and 3 features:
 
 <div align="center">
 <p float="middle">
-    <img src="images/roccurve_2.png" width="400" />
-    <img src="images/roccurve_3.png" width="400" /> 
+    <img src="images/roccurve_2.png" width="500" />
+    <img src="images/roccurve_3.png" width="500" /> 
 </p>
 
 Confusion Matrix with 3 features:
