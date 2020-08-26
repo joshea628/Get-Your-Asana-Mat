@@ -8,11 +8,11 @@ Yoga has been a huge part of my life, it's something that grounds me and has mad
 
 The images I'm using for this project have been found on the internet, collected by a user: and shared on Reddit, and the rest of the images I collected from a google image search and from friends and classmates. 
 
-The downdog class has __ images.
-The mountain class has __ images.
-The halfmoon class has __ images.
+ - The downdog class has __ images.
+ - The mountain class has __ images.
+ - The halfmoon class has __ images.
 
-I created a pipeline to read in the URLs to the images, convert the images to greyscale, and resize to __ pixels. 
+I created a pipeline to read in the URLs to the images, convert the images to greyscale, and resize to 43 pixels. 
 
 Here is a sample of an original image, greyscale image, and a resized image from each class: 
 
@@ -62,3 +62,10 @@ Canny Filter:
     <img src="images/avg_canny_mountain.png" width="500" /> 
 </p>
 
+## Logistic Regression
+
+Based on the featurization above, I decided to use the Canny filter in the Logistic Regression since the images were so different from eachother. 
+
+Since images have so many features (these images are 43x43 pixels), I then used Principal Component Analysis to consolidate down to two features before cross validating. 
+
+I used k-folds cross validation with 5 folds and a threshold of 0.75 in order to be classified as Mountain Pose. 
