@@ -1,4 +1,4 @@
-# Yoga-Classifier
+# Get Your Asana Mat
 
 ## Background and Motivation
 
