@@ -12,6 +12,16 @@ from sklearn.metrics import roc_curve, auc, confusion_matrix
 plt.style.use('seaborn')
 mpl.rcParams['figure.dpi'] = 100
 
+def process_data(all_poses, pickle=False):
+    all_data = []
+    canny_data = []
+    for pose in all_poses:
+        data = np.load(f'../data/{pose}.npy', allow_pickle=pickle)
+        if not pickle:
+            canny_data.append(flatten_and_save_canny(data))
+        all_data.append(data)
+    return all_data, canny_data
+
 def two_dim_pca(X, y):
     fig, ax = plt.subplots(1)
     ax.set_xlabel('Principal Component 1', fontsize = 15)
@@ -59,8 +69,7 @@ def crossVal(X, y, k, threshold=0.75):
         test_accuracy.append(accuracy_score(y_test, y_hat_test))
     return np.mean(train_accuracy), np.mean(test_accuracy) 
 
-def we_will_roc_you(X,y):
-    X_train, X_test, y_train, y_test = train_test_split(X,y)
+def we_will_roc_you(X_train, X_test, y_train, y_test):
     #train model
     model = LogisticRegression()
     model.fit(X_train,y_train)
@@ -105,17 +114,27 @@ def con_matrix(y_hat, y_test, poses):
 
 if __name__ == '__main__':
     #create canny filter flattened data for each pose
-    downdog_data = np.load('../data/downdog.npy')
-    mountain_data = np.load('../data/mountain.npy')
-    canny_downdog = flatten_and_save_canny(downdog_data)
-    canny_mountain = flatten_and_save_canny(mountain_data)
+    all_poses = ['downdog','mountain','file_downdog','file_mountain']
+    data, canny_data = process_data(all_poses)
+    canny_downdog, canny_mountain = canny_data[0], canny_data[1]
+    canny_file_downdog, canny_file_mountain = canny_data[2], canny_data[3]
     downdog_target = np.zeros((len(canny_downdog),1),dtype=int)
-    mountain_target = np.ones((len(canny_mountain),1),dtype=int)
+    file_downdog_target = np.zeros((len(canny_file_downdog),1),dtype=int)
+    mountain_target= np.ones((len(canny_mountain),1),dtype=int)
+    file_mountain_target = np.ones((len(canny_file_mountain),1),dtype=int)
 
-    #combine two poses into one dataset
-    X = np.concatenate((canny_downdog, canny_mountain), axis=0)
-    targets = np.concatenate((downdog_target, mountain_target), axis=0)
+    # #raw data combined
+    raw_files = ['raw_downdog', 'raw_mountain', 'raw_file_downdog','raw_file_mountain']
+    raw_data, canny_trash = process_data(raw_files, pickle=True)
+    X_raw = np.concatenate((raw_data[0],raw_data[1],raw_data[2],raw_data[3]),axis=0)
+    
+    # #combine two poses into one dataset
+    X = np.concatenate((canny_downdog, canny_mountain, 
+                            canny_file_downdog, canny_file_mountain), axis=0)
+    targets = np.concatenate((downdog_target, mountain_target, 
+                                file_downdog_target, file_mountain_target), axis=0)
     y = np.ravel(targets)
+    indeces = np.arange(len(X))
 
     #featurize into two components using PCA
     pca = decomposition.PCA(n_components=2)
@@ -127,32 +146,52 @@ if __name__ == '__main__':
     X_pca3 = pca.fit_transform(X)
     three_dim_pca(X_pca3, y)
 
-    #create holdout set - train/test split
-    X_train2, X_test2, y_train2, y_test2 = train_test_split(X_pca,y)
-    X_train3, X_test3, y_train3, y_test3 = train_test_split(X_pca3,y)
+    #create train/test split with indeces for 2 features
+    X_tr2, X_te2, y_tr2, y_te2, idx_tr2, idx_te2 = train_test_split(X_pca,
+                                                                    y,indeces,
+                                                                    random_state=0)
+    #create train/test split with indeces for 3 features    
+    X_tr3, X_te3, y_tr3, y_te3, idx_tr3, idx_te3 = train_test_split(X_pca3,
+                                                                    y,indeces,
+                                                                    random_state=0)
 
     #cross validation
     threshold = 0.53
-    train_acc2, test_acc2 = crossVal(X_train2, y_train2, 5, threshold=threshold)
-    train_acc3, test_acc3 = crossVal(X_train3, y_train3, 5, threshold=threshold)
+    train_acc2, test_acc2 = crossVal(X_tr2, y_tr2, 5, 
+                                        threshold=threshold)
+    train_acc3, test_acc3 = crossVal(X_tr3, y_tr3, 5, 
+                                        threshold=threshold)
     print(train_acc2, test_acc2)
     print(train_acc3, test_acc3)
 
     #ROC curves
-    we_will_roc_you(X_train2,y_train2)
-    thresh = we_will_roc_you(X_train3,y_train3)
-    print(thresh)
-
+    #we_will_roc_you(X_tr2, X_te2, y_tr2, y_te2)
+    #we_will_roc_you(X_tr3, X_te3, y_tr3, y_te3)
+    
     #logistic regression with 3 features:
     model = LogisticRegression()
-    model.fit(X_train3,y_train3)
-    probabilities = model.predict_proba(X_test3)[:,1]
+    model.fit(X_tr3,y_tr3)
+    probabilities = model.predict_proba(X_te3)[:,1]
     y_hat = (probabilities >= threshold).astype(int)
     print(y_hat)
-    print(y_test3)
+    print(y_te3)
 
     #confusion matrix
     poses = ['downdog', 'mountain']
-    con_matrix(y_test3, y_hat, poses)
-    plt.show()
+    #con_matrix(y_te3, y_hat, poses)
     
+    #show incorrect positives
+    fig, ax = plt.subplots(1)
+    display = X_raw[430]
+    ax.imshow(display)
+    ax.set_axis_off()
+    plt.savefig('../images/actual_mountain_3.png')
+    #plt.show()
+    
+    #model labeled mountain, actual downdog
+    #indeces [0,4,33]
+    print(idx_te3[0],idx_te3[4],idx_te3[33]) # 233, 96, 220
+
+    #model labeled downdog, actual mountain
+    #indeces [10, 15,18]
+    print(idx_te3[10],idx_te3[15],idx_te3[18]) # 354, 420, 430

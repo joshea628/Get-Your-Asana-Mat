@@ -17,7 +17,7 @@ class ImageManipulation(object):
     methods: greyscale, resize, convert_to_array
 
     '''
-    def __init__(self, path, resolution, pose):
+    def __init__(self, path, resolution, pose, URL=False):
         self.path = path
         self.resolution = resolution
         self.pose = pose
@@ -25,8 +25,9 @@ class ImageManipulation(object):
         self.image_array = []
         self.image_grey = []
         self.image_resized = []
+        self.URL = URL
 
-    def _read_images(self):
+    def read_URL_images(self):
         '''
         Reads in file and adds images to list
         '''
@@ -44,22 +45,35 @@ class ImageManipulation(object):
             except OSError:
                 print('image failed...') 
         return self  
-             
+    
+    def read_file_images(self):
+        image_list = [f for f in os.listdir(self.path) if not f.startswith('.')]
+        for filename in image_list:
+            try:
+                im=Image.open(f'{self.path}/{filename}')
+                self.image_array.append(im)
+            except OSError:
+                print('image failed...')
+        return self
+
     def greyscale(self):
         '''
         Converts image to greyscale
         '''
-        self._read_images()
+        if self.URL:
+            self._read_URL_images()
+        else:
+            self._read_file_images()
         for image in self.image_array:
             grey_image = image.convert('L')
             self.image_grey.append(grey_image)
-        return self 
+        return self.image_array
 
     def resize(self):
         '''
         resizes image to resolution input
         '''
-        for image in self.image_grey:
+        for image in self.image_array:
             self.image_resized.append(image.resize((self.resolution,
                                                      self.resolution)))
         return self
@@ -77,16 +91,36 @@ class ImageManipulation(object):
         print(f'Images saved as: {self.pose}.npy')
         return self 
 
+    def save_images_color(self):
+        image_final = []
+        for image in self.image_array:
+             image_matrix = np.array(image)
+             image_final.append(image_matrix)
+        np.save(f'raw_{self.pose}', image_final)
+        print(f'Images saved as: raw_{self.pose}.npy')
+        return self 
+
 if __name__ == "__main__":
     poses = ['downdog','mountain']
 
     for pose in poses:
         path = f'../data/{pose}.txt'
-        process = ImageManipulation(path, 43, pose)
-        process.greyscale()
-        process.resize()
-        process.save_images()
+        process = ImageManipulation(path, 43, pose, URL=True)
+        process.read_URL_images()
+        # # process.greyscale()
+        #process.resize()
+        process.save_images_color()
         
+    files = ['file_downdog','file_mountain']
+
+    for fil in files:
+        directory = f'../images/{fil}'
+        process = ImageManipulation(directory, 43, fil)
+        process.read_file_images()
+        # #process.greyscale()
+        #process.resize()
+        process.save_images_color()
+
 
     
     

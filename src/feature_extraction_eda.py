@@ -65,11 +65,11 @@ def apply_filter(data, classname, img_filter=sobel,square_size=43):
     '''
     avg_image = data.mean(axis=0)
     shaped_avg_image = avg_image.reshape(square_size,square_size)
-    filter_image = img_filter(shaped_avg_image, sigma=4) #uncomment for canny
+    filter_image = img_filter(shaped_avg_image)#, sigma=4) #uncomment for canny
     fig, ax = plt.subplots(1)
-    title = f'{classname} With Canny Filter'
+    title = f'{classname} With Sobel Filter'
     display_image(filter_image, ax, title)
-    plt.savefig(f'../images/avg_canny_{classname}.png')
+    plt.savefig(f'../images/avg_sobel_{classname}.png')
     return ax
 
 def flatten_and_save_canny(data, square_size=43):
@@ -90,14 +90,14 @@ def flatten_and_save_canny(data, square_size=43):
     return canny_images
 
 if __name__ == '__main__':
-    poses = ['downdog','mountain']
+    poses = ['downdog','mountain','file_downdog','file_mountain']
     canny_data = []
     for pose in poses:
         filepath = f'../data/{pose}.npy'
         data = np.load(filepath)
         avg_pixel_intensity(data, pose)
         histograms_of_pixel_intensities(data, pose)
-        apply_filter(data, pose, img_filter=canny)
+        apply_filter(data, pose, img_filter=sobel)
         #plt.show()
         
     
