@@ -7,7 +7,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import KFold, train_test_split
 from sklearn.metrics import accuracy_score, precision_score, recall_score
 from feature_extraction_eda import flatten_and_save_canny
-from sklearn.metrics import roc_curve, auc, confusion_matrix
+from sklearn.metrics import roc_curve, auc, confusion_matrix, roc_auc_score
 
 plt.style.use('seaborn')
 mpl.rcParams['figure.dpi'] = 100
@@ -75,10 +75,11 @@ def we_will_roc_you(X_train, X_test, y_train, y_test):
     model.fit(X_train,y_train)
     probabilities = model.predict_proba(X_test)[:,1]
     fpr, tpr, thresholds = roc_curve(y_test, probabilities)
+    auc_score = round(roc_auc_score(y_test,probabilities), 4)
     #plot
     fig, ax = plt.subplots(1, figsize=(10,6))
     x = np.linspace(0,1, 100)
-    ax.plot(fpr, tpr)
+    ax.plot(fpr, tpr, label=f'AUC = {auc_score}')
     ax.plot(x, x, linestyle='--', color ='black', label='Random Guess')
     ax.set_xlabel('False Positive Rate (FPR)', fontsize=16)
     ax.set_ylabel('True Positive Rate (TPR)', fontsize=16)
@@ -166,7 +167,7 @@ if __name__ == '__main__':
 
     #ROC curves
     #we_will_roc_you(X_tr2, X_te2, y_tr2, y_te2)
-    #we_will_roc_you(X_tr3, X_te3, y_tr3, y_te3)
+    we_will_roc_you(X_tr3, X_te3, y_tr3, y_te3)
     
     #logistic regression with 3 features:
     model = LogisticRegression()
@@ -178,20 +179,20 @@ if __name__ == '__main__':
 
     #confusion matrix
     poses = ['downdog', 'mountain']
-    #con_matrix(y_te3, y_hat, poses)
+    con_matrix(y_te3, y_hat, poses)
     
     #show incorrect positives
-    fig, ax = plt.subplots(1)
-    display = X_raw[430]
-    ax.imshow(display)
-    ax.set_axis_off()
-    plt.savefig('../images/actual_mountain_3.png')
-    #plt.show()
+    # fig, ax = plt.subplots(1)
+    # display = X_raw[430]
+    # ax.imshow(display)
+    # ax.set_axis_off()
+    # plt.savefig('../images/actual_mountain_3.png')
+    plt.show()
     
     #model labeled mountain, actual downdog
     #indeces [0,4,33]
-    print(idx_te3[0],idx_te3[4],idx_te3[33]) # 233, 96, 220
+    #print(idx_te3[0],idx_te3[4],idx_te3[33]) # 233, 96, 220
 
     #model labeled downdog, actual mountain
     #indeces [10, 15,18]
-    print(idx_te3[10],idx_te3[15],idx_te3[18]) # 354, 420, 430
+    #print(idx_te3[10],idx_te3[15],idx_te3[18]) # 354, 420, 430
