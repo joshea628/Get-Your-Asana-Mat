@@ -8,15 +8,14 @@
 
 ## Background and Motivation
 
-Yoga has been a huge part of my life, it's something that grounds me and has made me a more patient person. When thinking about project ideas, I wanted to do something that applied to my life in some way. While I'm not usually wondering which pose I am doing, I thought it could be super useful for people learning yoga. 
+Yoga has been a huge part of my life, it's something that grounds me and has made me a more patient person. I hope to become a Data Science Yoga Teacher and thought that a yoga pose classifier could be super useful for people learning yoge, who are not very familiar with pose names. The longterm goal for this project is to add in the whole range of Asanas, but will start with just 2 poses: mountain and downward dog.
 
 ## Data
 
-The images I'm using for this project have been found on the internet, collected by a user: and shared on Reddit, and the rest of the images I collected from a google image search and from friends and classmates. 
+The images I'm using for this project have been found on the internet, collected and shared by a reddit user, and the rest of the images I collected from a google image search, friends, and classmates. 
 
  - The downdog class has 234 images.
  - The mountain class has 232 images.
- - The halfmoon class has __ images.
 
 I created a pipeline to read in the URLs to the images, convert the images to greyscale, and resize to 43 pixels. 
 
@@ -24,7 +23,7 @@ Here is a sample of an original image, greyscale image, and a resized image from
 
 ______ insert reg, grey image, resized image here 
 
-Since yoga is all about shapes, color should not affect the classification at all. Not only does greyscaling and resizing the data make the data smaller, but it makes it easier to work with as well. 
+Since yoga is all about shapes, color should not affect the classification at all. Not only does greyscaling and resizing the data make the data smaller, but it makes it easier to work with. 
 
 ## EDA
 
@@ -94,19 +93,57 @@ The 2 component PCA-vectorized data resulted in a training accuracy was 0.781 an
 
 The 3 component PCA-vectorized data resulted in a training accuracy of 0.772 and a test accuracy of 0.773.
 
-ROC Curves with 2 and 3 features:
+Based on the cross validation scores, I decided to use the PCA with 3 feature data going forward. 
+After running the Logistic Regression model on the test dataset, there were a few results: 
+
+ROC Curve:
 
 <div align="center">
 <p float="middle">
-    <img src="images/roccurve_2.png" width="600" />
     <img src="images/roccurve_3.png" width="600" /> 
 </p>
 
 <div align="left">
 
-Confusion Matrix with 3 features:
+Confusion Matrix:
 
 <div align="center">
 
 ![](images/confusion_matrix_3.png)
+
+<div align="left">
+
+Overall this model comes up with a test accuracy of *****! 
+
+I'm pretty happy with the results but one thing I'd like to look at before moving on is what is going on in the pictures that have False Positives and False Negatives? 
+
+Here are some pictures that were incorrectly classified as mountain pose:
+
+<div align="center">
+<p float="middle">
+    <img src="images/actual_downdog_1.png" width="400" /> 
+    <img src="images/actual_downdog_2.png" width="400" /> 
+    <img src="images/actual_downdog_3.png" width="400" /> 
+</p>
+<div align="left">
+
+Since we're using edge detection as a way to featurize the data, the reason the model produced these false positives could be due to the harsh illustration lines and the windows behind the yogis.
+
+Here are some pictures that were incorrectly classified as downward dog: 
+
+<div align="center">
+<p float="middle">
+    <img src="images/actual_mountain_1.png" width="400" /> 
+    <img src="images/actual_mountain_2.png" width="400" /> 
+    <img src="images/actual_mountain_3.png" width="400" /> 
+</p>
+<div align="left">
+
+The lighting or backgrounds could be cause for false negatives in these cases.
+
+## Random Forest 
+
+These results were decent for the classification of just two poses, but how can we be sure that the relationship between the images is linear? 
+
+Let's try a Random Forest model!
 
