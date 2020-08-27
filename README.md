@@ -42,7 +42,7 @@ The first thing I did was take a look at the mean pixel intensities for each of 
 <div align="left">
 The downdog image looks a bit like a two-humped camel, but the general shape seems pretty decent. Mountain pose makes me feel a little uneasy with the slight creepyness, but it seems very clear and will hopefully do well in the model. 
 
-Next, I created histograms for the Frequency of the pixel intensities for each model. This shows how light and dark each image is, and how defined the shapes are: 
+Next, I created histograms for the Frequency of the pixel intensities for each model. This shows how light and dark each image is, and how defined the shapes are. Interpreting pixel intensities: 0 is white and 255 is black. 
 
 <div align="center">
 <p float="middle">
@@ -51,9 +51,12 @@ Next, I created histograms for the Frequency of the pixel intensities for each m
 </p>
 
 <div align="left">
-The downdog histogram has a lot more grey area, which you can see in the pixel intensity graphs above, which I expect will make it a bit harder to classify when applied to more than just the mountain/downdog comparison. Mountain is well defined and dark which again, I expect will do well in a model. 
+
+The downdog histogram has a lot more grey area, which I expect will make it a bit harder to classify, especially when applied to more than just the mountain/downdog comparison. Mountain is well defined with the majority of the average image being dark pixel intensities which, I expect will do well in a model. I predict that there will be a lot more downdog images incorrectly classified based on these average images.
 
 What about edge detection? Since we're working with shapes, maybe looking at the edges of each pose as a feature will do better in the model.
+
+Let's take a look at the average image from each class again, but this time play around with a couple of different edge detection filters.
 
 Sobel Filter:
 
@@ -64,6 +67,7 @@ Sobel Filter:
 </p>
 
 <div align="left">
+
 Canny Filter: 
 
 <div align="center">
@@ -74,11 +78,13 @@ Canny Filter:
 
 <div align="left">
 
-## Logistic Regression
+## Principal Component Analysis
 
-Based on the featurization above, I decided to use the Canny filter in the Logistic Regression since the images were so different from eachother. 
+Based on the featurization above, I decided to use the Canny filter in my models since the images are so different from eachother. Between the Canny and Sobel, the Canny filter has much harsher lines, which could bode well for the model results.
 
-Since images have so many features (these images are 43x43 pixels), I then used Principal Component Analysis to consolidate down to two features before cross validating. I also wanted to look at using 3 features to see how that would affect the model accuracy.
+Since images have so many features (these images are 43x43 pixels), I used Principal Component Analysis to consolidate the features and reduce dimensionality of the data. PCA takes all the features from your data and forces them into the number of features that you specify. It does this orthogonally.
+
+I'm feeling incrediby confident in the difference between the two poses, so I'm going to try to reduce my data down to two and three features using PCA to compare the accuracy results of the models I will use later on. Here are the scatter plots: 
 
 <div align="center">
 <p float="middle">
@@ -86,7 +92,14 @@ Since images have so many features (these images are 43x43 pixels), I then used 
     <img src="images/PCA_plot_3.png" width="600" /> 
 </p>
 <div align="left">
-I used k-folds cross validation with 5 folds and a probability threshold of 0.75 in order to be classified as Mountain Pose. I chose a 0.75 threshold because mountain pose has a much more distinct image as seen in the mean image pixel intensity above.
+
+A lot of the points in 2D look pretty separate, but there's a large section of overlap. 
+
+In 3D, it looks like the poses separate a tiny bit more, but it's hard to tell if it's enough to improve the accuracy of the model. 
+
+## Logistic Regression
+
+I used k-folds cross validation with 5 folds and a probability threshold of 0.53 in order to be classified as Mountain Pose. I chose a 0.53 threshold after looking at an ROC curve and pulling out the threshold for the elbow of the plot. See the ROC curve below! 
 
 During cross validation:
 The 2 component PCA-vectorized data resulted in a training accuracy was 0.781 and a test accuracy was 0.771
@@ -113,7 +126,7 @@ Confusion Matrix:
 
 <div align="left">
 
-Overall this model comes up with a test accuracy of *****! 
+Overall this model comes up with a test accuracy of 0.8427! 
 
 I'm pretty happy with the results but one thing I'd like to look at before moving on is what is going on in the pictures that have False Positives and False Negatives? 
 
