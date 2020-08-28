@@ -13,6 +13,11 @@ plt.style.use('seaborn')
 mpl.rcParams['figure.dpi'] = 100
 
 def process_data(all_poses, pickle=False):
+    '''
+    Create canny filtered data, as vectorized images
+
+    Returns both uncanny-ed and canny-ed data
+    '''
     all_data = []
     canny_data = []
     for pose in all_poses:
@@ -23,6 +28,9 @@ def process_data(all_poses, pickle=False):
     return all_data, canny_data
 
 def two_dim_pca(X, y):
+    '''
+    Plots 2D PCA factors and saves image
+    '''
     fig, ax = plt.subplots(1)
     ax.set_xlabel('Principal Component 1', fontsize = 15)
     ax.set_ylabel('Principal Component 2', fontsize = 15)
@@ -31,6 +39,9 @@ def two_dim_pca(X, y):
     plt.savefig('../images/PCA_plot_2.png')
 
 def three_dim_pca(X, y):
+    '''
+    Plots 3D PCA factors and saves image
+    '''
     fig = plt.figure(figsize=(10,12))
     ax = fig.add_subplot(111, projection='3d')
     ax.set_xlabel('Principal Component 1', fontsize = 15)
@@ -50,6 +61,11 @@ def three_dim_pca(X, y):
     plt.savefig('../images/PCA_plot_3.png')
 
 def crossVal(X, y, k, threshold=0.75):
+    '''
+    Performs KFold Cross Validataion with a Logistic Regression Model
+    
+    Returns Train and Test Accuracy from cross validation
+    '''
     kf = KFold(n_splits=k)
     train_accuracy = []
     test_accuracy = []
@@ -70,6 +86,10 @@ def crossVal(X, y, k, threshold=0.75):
     return np.mean(train_accuracy), np.mean(test_accuracy) 
 
 def we_will_roc_you(X_train, X_test, y_train, y_test):
+    '''
+    Plots and saves an ROC curve for logistic Regression and calculates the 
+    total accuracy of the model as Area Under the Curve
+    '''
     #train model
     model = LogisticRegression()
     model.fit(X_train,y_train)
@@ -89,6 +109,9 @@ def we_will_roc_you(X_train, X_test, y_train, y_test):
     return thresholds[fpr>0.2][0]
 
 def con_matrix(y_hat, y_test, poses):
+    '''
+    Calculates and plots a confusion matrix for predicted and true labels
+    '''
     cm = confusion_matrix(y_test, y_hat)
     fig, ax = plt.subplots(1)
     p = ax.imshow(cm, interpolation='nearest', cmap='Blues')
@@ -113,40 +136,40 @@ def con_matrix(y_hat, y_test, poses):
     plt.savefig('../images/confusion_matrix_3.png',  bbox_inches='tight')
     return cm
 
+#create canny filter flattened data for each pose
+all_poses = ['downdog','mountain','file_downdog','file_mountain']
+data, canny_data = process_data(all_poses)
+canny_downdog, canny_mountain = canny_data[0], canny_data[1]
+canny_file_downdog, canny_file_mountain = canny_data[2], canny_data[3]
+downdog_target = np.zeros((len(canny_downdog),1),dtype=int)
+file_downdog_target = np.zeros((len(canny_file_downdog),1),dtype=int)
+mountain_target= np.ones((len(canny_mountain),1),dtype=int)
+file_mountain_target = np.ones((len(canny_file_mountain),1),dtype=int)
+
+# #raw data combined
+raw_files = ['raw_downdog', 'raw_mountain', 'raw_file_downdog','raw_file_mountain']
+raw_data, canny_trash = process_data(raw_files, pickle=True)
+X_raw = np.concatenate((raw_data[0],raw_data[1],raw_data[2],raw_data[3]),axis=0)
+
+# #combine two poses into one dataset
+X = np.concatenate((canny_downdog, canny_mountain, 
+                        canny_file_downdog, canny_file_mountain), axis=0)
+targets = np.concatenate((downdog_target, mountain_target, 
+                            file_downdog_target, file_mountain_target), axis=0)
+y = np.ravel(targets)
+indeces = np.arange(len(X))
+
+#featurize into two components using PCA
+pca = decomposition.PCA(n_components=2)
+X_pca = pca.fit_transform(X)
+two_dim_pca(X_pca, y)
+
+#featurize into 3 components using PCA
+pca = decomposition.PCA(n_components=3)
+X_pca3 = pca.fit_transform(X)
+three_dim_pca(X_pca3, y)
+
 if __name__ == '__main__':
-    #create canny filter flattened data for each pose
-    all_poses = ['downdog','mountain','file_downdog','file_mountain']
-    data, canny_data = process_data(all_poses)
-    canny_downdog, canny_mountain = canny_data[0], canny_data[1]
-    canny_file_downdog, canny_file_mountain = canny_data[2], canny_data[3]
-    downdog_target = np.zeros((len(canny_downdog),1),dtype=int)
-    file_downdog_target = np.zeros((len(canny_file_downdog),1),dtype=int)
-    mountain_target= np.ones((len(canny_mountain),1),dtype=int)
-    file_mountain_target = np.ones((len(canny_file_mountain),1),dtype=int)
-
-    # #raw data combined
-    raw_files = ['raw_downdog', 'raw_mountain', 'raw_file_downdog','raw_file_mountain']
-    raw_data, canny_trash = process_data(raw_files, pickle=True)
-    X_raw = np.concatenate((raw_data[0],raw_data[1],raw_data[2],raw_data[3]),axis=0)
-    
-    # #combine two poses into one dataset
-    X = np.concatenate((canny_downdog, canny_mountain, 
-                            canny_file_downdog, canny_file_mountain), axis=0)
-    targets = np.concatenate((downdog_target, mountain_target, 
-                                file_downdog_target, file_mountain_target), axis=0)
-    y = np.ravel(targets)
-    indeces = np.arange(len(X))
-
-    #featurize into two components using PCA
-    pca = decomposition.PCA(n_components=2)
-    X_pca = pca.fit_transform(X)
-    two_dim_pca(X_pca, y)
-
-    #featurize into 3 components using PCA
-    pca = decomposition.PCA(n_components=3)
-    X_pca3 = pca.fit_transform(X)
-    three_dim_pca(X_pca3, y)
-
     #create train/test split with indeces for 2 features
     X_tr2, X_te2, y_tr2, y_te2, idx_tr2, idx_te2 = train_test_split(X_pca,
                                                                     y,indeces,
@@ -155,7 +178,6 @@ if __name__ == '__main__':
     X_tr3, X_te3, y_tr3, y_te3, idx_tr3, idx_te3 = train_test_split(X_pca3,
                                                                     y,indeces,
                                                                     random_state=0)
-
     #cross validation
     threshold = 0.53
     train_acc2, test_acc2 = crossVal(X_tr2, y_tr2, 5, 
@@ -164,11 +186,9 @@ if __name__ == '__main__':
                                         threshold=threshold)
     print(train_acc2, test_acc2)
     print(train_acc3, test_acc3)
-
     #ROC curves
     #we_will_roc_you(X_tr2, X_te2, y_tr2, y_te2)
     we_will_roc_you(X_tr3, X_te3, y_tr3, y_te3)
-    
     #logistic regression with 3 features:
     model = LogisticRegression()
     model.fit(X_tr3,y_tr3)
@@ -176,23 +196,22 @@ if __name__ == '__main__':
     y_hat = (probabilities >= threshold).astype(int)
     print(y_hat)
     print(y_te3)
-
+    #overall accuracy
+    total_acc = accuracy_score(y_te3, y_hat)
+    print(total_acc)
     #confusion matrix
     poses = ['downdog', 'mountain']
     con_matrix(y_te3, y_hat, poses)
-    
     #show incorrect positives
     # fig, ax = plt.subplots(1)
     # display = X_raw[430]
     # ax.imshow(display)
     # ax.set_axis_off()
     # plt.savefig('../images/actual_mountain_3.png')
-    plt.show()
-    
+    # plt.show()  
     #model labeled mountain, actual downdog
     #indeces [0,4,33]
     #print(idx_te3[0],idx_te3[4],idx_te3[33]) # 233, 96, 220
-
     #model labeled downdog, actual mountain
     #indeces [10, 15,18]
     #print(idx_te3[10],idx_te3[15],idx_te3[18]) # 354, 420, 430
