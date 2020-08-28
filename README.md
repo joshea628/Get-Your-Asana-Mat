@@ -23,8 +23,8 @@ Here is a sample of an original image and greyscale image of a guy you all know 
 
 <div align="center">
 <p float="middle">
-    <img src="images/frank.png" width="450" />
-    <img src="images/frank_grey.png" width="450" /> 
+    <img src="images/frank.png" width="400" />
+    <img src="images/frank_grey.png" width="400" /> 
 </p>
 <div align="left">
 
