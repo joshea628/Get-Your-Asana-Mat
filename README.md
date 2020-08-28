@@ -47,7 +47,7 @@ The first thing I did was take a look at the mean pixel intensities for each of 
 <div align="left">
 The downdog image looks a bit like a two-humped camel, but the general shape seems pretty decent. Mountain pose makes me feel a little uneasy with the slight creepiness, but it seems very clear and will hopefully do well in the model. 
 
-Next, I created histograms for the Frequency of the pixel intensities for each model. This shows how light and dark each image is, and how defined the shapes are. Interpreting pixel intensities: 0 is white and 255 is black. 
+Next, I created histograms for the Frequency of the pixel intensities for each model. This shows how light and dark each image is, and how defined the shapes are. Interpreting pixel intensities: 0 is black and 255 is white. 
 
 <div align="center">
 <p float="middle">
@@ -57,7 +57,7 @@ Next, I created histograms for the Frequency of the pixel intensities for each m
 
 <div align="left">
 
-The downdog histogram has a lot more grey area, which I expect will make it a bit harder to classify, especially when applied to more than just the mountain/downdog comparison. Mountain is well defined with the majority of the average image being dark pixel intensities which, I expect will do well in a model. I predict that there will be a lot more downdog images incorrectly classified based on these average images.
+The downdog histogram has a lot more grey area, which I expect will make it a bit harder to classify, especially when applied to more than just the mountain/downdog comparison. Mountain is well defined with the majority of the average image being white pixel intensities which, I expect will do well in a model. I predict that there will be a lot more downdog images incorrectly classified based on these average images.
 
 What about edge detection? Since we're working with shapes, maybe looking at the edges of each pose as a feature will do better in the model.
 
