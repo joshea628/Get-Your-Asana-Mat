@@ -126,7 +126,7 @@ Confusion Matrix:
 
 <div align="left">
 
-Overall this model comes up with a test accuracy of 0.8427! 
+Overall this model comes up with a test accuracy of 0.782! 
 
 I'm pretty happy with the results but one thing I'd like to look at before moving on is what is going on in the pictures that have False Positives and False Negatives? 
 
@@ -152,11 +152,65 @@ Here are some pictures that were incorrectly classified as downward dog:
 </p>
 <div align="left">
 
-The lighting or backgrounds could be cause for false negatives in these cases.
+The lighting or backgrounds could be cause for false negatives in these cases. What do you think? 
 
 ## Random Forest 
 
 These results were decent for the classification of just two poses, but how can we be sure that the relationship between the images is linear? 
 
 Let's try a Random Forest model!
+
+Since the PCA with 3 features produced the best results in the Logistic Regression, again I used this (on top of the canny filter) in the Random Forest model. 
+
+A Random Forest is an ensemble method that combines multiple, weak learning decision trees to create one strong learner. It does this by randomly selecting a number of features to consider for each split. This ensures that the trees that make up the forest are more independent of one another than single trees. They don't train on all the same data or features which makes them more generalizable. 
+
+Random Forests have a few different hyper-parameters, and in order to choose the best ones, I ran a RandomizedCV search with a few different options. The result included the following: 
+ - n_estimators = 10
+ - min_samples_split = 4
+ - min_samples_leaf = 1
+ - max_features = log2
+ - max_depth = 5
+ - bootstrap = True
+
+Using the same method of cross-validation as Logistic Regression (5-folds with a threshold of 0.4), the training accuracy was 0.856 and the test accuracy was 0.664. This initially looks like the model is overfitting. 
+
+After running the model, here is the ROC curve and confusion matrix:
+
+<div align="center">
+<p float="middle">
+    <img src="images/roccurve_random_forest.png" width="600" /> 
+    <img src="images/confusion_matrix_RF.png" width="600" /> 
+</p>
+<div align="left">
+
+The accuracy on the holdout data was 0.765!
+
+Here are some pictures that were incorrectly classified as mountain pose:
+
+<div align="center">
+<p float="middle">
+    <img src="images/actual_downdog_4.png" width="400" /> 
+    <img src="images/actual_downdog_5.png" width="400" /> 
+    <img src="images/actual_downdog_6.png" width="400" /> 
+</p>
+<div align="left">
+
+Since we're using edge detection as a way to featurize the data, the reason the model produced these false positives could be due to the harsh illustration lines and the windows behind the yogis.
+
+Here are some pictures that were incorrectly classified as downward dog: 
+
+<div align="center">
+<p float="middle">
+    <img src="images/actual_mountain_4.png" width="400" /> 
+    <img src="images/actual_mountain_5.png" width="400" /> 
+    <img src="images/actual_mountain_6.png" width="400" /> 
+</p>
+<div align="left">
+
+## Future work
+
+The next thing I'd like to do is use a CNN on the data, and start to incorporate more poses. How many poses can I add before the accuracy gets down to random chance (50%)? 
+
+I would also like to turn the model into an app.
+
 
