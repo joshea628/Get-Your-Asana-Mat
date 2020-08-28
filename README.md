@@ -19,7 +19,7 @@ The images I'm using for this project have been found on the internet, collected
 
 I created a pipeline to read in the URLs to the images, convert the images to greyscale, and resize to 43 pixels. 
 
-Here is a sample of an original image, greyscale image of a guy you all know and love: 
+Here is a sample of an original image and greyscale image of a guy you all know and love in my dataset: 
 
 <div align="center">
 <p float="middle">
@@ -92,8 +92,8 @@ I'm feeling incrediby confident in the difference between the two poses, so I'm 
 
 <div align="center">
 <p float="middle">
-    <img src="images/PCA_plot_2.png" width="600" />
-    <img src="images/PCA_plot_3.png" width="600" /> 
+    <img src="images/PCA_plot_2.png" width="400" />
+    <img src="images/PCA_plot_3.png" width="400" /> 
 </p>
 <div align="left">
 
@@ -193,9 +193,9 @@ Here are some pictures that were incorrectly classified as mountain pose:
 
 <div align="center">
 <p float="middle">
-    <img src="images/actual_downdog_4.png" width="400" /> 
-    <img src="images/actual_downdog_5.png" width="400" /> 
-    <img src="images/actual_downdog_6.png" width="400" /> 
+    <img src="images/actual_downdog_4.png" width="350" /> 
+    <img src="images/actual_downdog_5.png" width="350" /> 
+    <img src="images/actual_downdog_6.png" width="350" /> 
 </p>
 <div align="left">
 
