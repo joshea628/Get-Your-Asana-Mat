@@ -8,7 +8,7 @@
 
 ## Background and Motivation
 
-Yoga has been a huge part of my life, it's something that grounds me and has made me a more patient person. I hope to become a Data Science Yoga Teacher and thought that a yoga pose classifier could be super useful for people learning yoge, who are not very familiar with pose names. The longterm goal for this project is to add in the whole range of Asanas, but will start with just 2 poses: mountain and downward dog.
+Yoga has been a huge part of my life, it's something that grounds me and has made me a more patient person. I hope to become a Data Science Yoga Teacher and thought that a yoga pose classifier could be super useful for people learning yoga, who are not very familiar with pose names. The longterm goal for this project is to add in the whole range of Asanas, but will start with just 2 poses: mountain and downward dog.
 
 ## Data
 
@@ -19,9 +19,13 @@ The images I'm using for this project have been found on the internet, collected
 
 I created a pipeline to read in the URLs to the images, convert the images to greyscale, and resize to 43 pixels. 
 
-Here is a sample of an original image, greyscale image, and a resized image from each class: 
+Here is a sample of an original image, greyscale image of a guy you all know and love: 
 
-______ insert reg, grey image, resized image here 
+<div align="center">
+<p float="middle">
+    <img src="images/frank.png" width="600" />
+    <img src="images/frank_grey.png" width="600" /> 
+</p>
 
 Since yoga is all about shapes, color should not affect the classification at all. Not only does greyscaling and resizing the data make the data smaller, but it makes it easier to work with. 
 
