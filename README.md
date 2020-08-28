@@ -8,14 +8,14 @@
 
 ## Background and Motivation
 
-Yoga has been a huge part of my life, it's something that grounds me and has made me a more patient person. I hope to become a Data Science Yoga Teacher and thought that a yoga pose classifier could be super useful for people learning yoga, who are not very familiar with pose names. The longterm goal for this project is to add in the whole range of Asanas, but will start with just 2 poses: mountain and downward dog.
+Yoga has been a huge part of my life, it's something that grounds me and has made me a more patient person. I hope to become a yoga teacher one day, and thought that a yoga pose classifier could be super useful for people learning yoga, who are not very familiar with pose names. The longterm goal for this project is to add in the whole range of asanas, but will start with just 2 poses: mountain and downward dog.
 
 ## Data
 
 The images I'm using for this project have been found on the internet, collected and shared by a reddit user, and the rest of the images I collected from a google image search, friends, and classmates. 
 
- - The downdog class has 234 images.
- - The mountain class has 232 images.
+ - The downdog class has 240 images.
+ - The mountain class has 240 images.
 
 I created a pipeline to read in the URLs to the images, convert the images to greyscale, and resize to 43 pixels. 
 
@@ -45,7 +45,7 @@ The first thing I did was take a look at the mean pixel intensities for each of 
 </p>
 
 <div align="left">
-The downdog image looks a bit like a two-humped camel, but the general shape seems pretty decent. Mountain pose makes me feel a little uneasy with the slight creepyness, but it seems very clear and will hopefully do well in the model. 
+The downdog image looks a bit like a two-humped camel, but the general shape seems pretty decent. Mountain pose makes me feel a little uneasy with the slight creepiness, but it seems very clear and will hopefully do well in the model. 
 
 Next, I created histograms for the Frequency of the pixel intensities for each model. This shows how light and dark each image is, and how defined the shapes are. Interpreting pixel intensities: 0 is white and 255 is black. 
 
