@@ -23,8 +23,8 @@ Here is a sample of an original image and greyscale image of a guy you all know 
 
 <div align="center">
 <p float="middle">
-    <img src="images/frank.png" width="600" />
-    <img src="images/frank_grey.png" width="600" /> 
+    <img src="images/frank.png" width="400" />
+    <img src="images/frank_grey.png" width="400" /> 
 </p>
 
 Since yoga is all about shapes, color should not affect the classification at all. Not only does greyscaling and resizing the data make the data smaller, but it makes it easier to work with. 
@@ -92,8 +92,8 @@ I'm feeling incrediby confident in the difference between the two poses, so I'm 
 
 <div align="center">
 <p float="middle">
-    <img src="images/PCA_plot_2.png" width="400" />
-    <img src="images/PCA_plot_3.png" width="400" /> 
+    <img src="images/PCA_plot_2.png" width="600" />
+    <img src="images/PCA_plot_3.png" width="600" /> 
 </p>
 <div align="left">
 
