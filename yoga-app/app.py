@@ -49,7 +49,7 @@ def process_img(filename):
     image_batch = np.expand_dims(numpy_image, axis =0)
     return image_batch
 
-def model_predict(img_path,model):
+def get_category(img_path,model):
     """
     Uses an image and a model to return the names and the predictions of the top 3 classes
     """
@@ -96,7 +96,7 @@ if __name__ == '__main__':
         class_names = np.array(pickle.load(f))
 
     model = load_model('models/87.5_dog_mount_halfmoon_chair.h5')
-    model._make_predict_function()
+    #model._make_predict_function()
     print('Model loaded. Start serving...')
 
     app.run(host='0.0.0.0',port=8105,debug=True)
