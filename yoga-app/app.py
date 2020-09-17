@@ -12,8 +12,7 @@ from tensorflow.keras.applications.xception import preprocess_input
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import img_to_array, load_img
 from werkzeug.utils import secure_filename
-from tensorflow.keras.experimental import load_from_saved_model
-import tensorflow_hub as hub
+
 
 app = Flask(__name__)
 
