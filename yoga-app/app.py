@@ -96,7 +96,7 @@ if __name__ == '__main__':
     with open ('models/classes.pkl', 'rb') as f:
         class_names = np.array(pickle.load(f))
 
-    model = load_model('models/bestmodel.h5')
+    model = load_model('models/87.5_dog_mount_halfmoon_chair.h5')
     model._make_predict_function()
     print('Model loaded. Start serving...')
 
