@@ -1,0 +1,10 @@
+(lp0
+S'Chair'
+p1
+aS'Downward Facing Dog'
+p2
+aS'Mountain'
+p3
+aS'Plank'
+p4
+a.
