@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 from PIL import Image, ExifTags
 from flask import Flask, redirect, render_template, request, url_for
-#from gevent.pywsgi import WSGIServer
+from gevent.pywsgi import WSGIServer
 from tensorflow.keras.applications.xception import preprocess_input
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import img_to_array, load_img
@@ -102,5 +102,5 @@ if __name__ == '__main__':
     app.run(host='0.0.0.0',port=8105,debug=True)
 
     # Serve the app with gevent
-    # http_server = WSGIServer(('0.0.0.0',5000), app)
-    # http_server.serve_forever()
+    http_server = WSGIServer(('0.0.0.0',8105), app)
+    http_server.serve_forever()
