@@ -99,7 +99,7 @@ if __name__ == '__main__':
     #model._make_predict_function()
     print('Model loaded. Start serving...')
 
-    app.run(host='0.0.0.0',port=8105,debug=True)
+    app.run(host='0.0.0.0')#,port=8105,debug=True)
 
     # Serve the app with gevent
     http_server = WSGIServer(('0.0.0.0',8105), app)
