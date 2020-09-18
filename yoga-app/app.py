@@ -72,7 +72,9 @@ def predict():
     basepath = os.path.dirname(__file__)
     file_path = os.path.join('/home/ubuntu/Get-Your-Asana-Mat/yoga-app', 'tmpimg', secure_filename(f.filename))
     #f.save(file_path)
-    rotate_save(f, file_path)
+    image=Image.open(f)
+    image.save(file_path)
+    #rotate_save(f, file_path)
 
     # Make prediction
     preds = get_category(file_path, model)
