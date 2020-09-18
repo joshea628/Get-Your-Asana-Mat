@@ -19,7 +19,7 @@ UPLOADS_PATH = join(dirname(realpath(__file__)), 'tmpimg/..')
 
 app = Flask(__name__)
 #app.config['SECRET_KEY'] = "yogayogayoga"
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['UPLOAD_FOLDER'] = UPLOADS_PATH
 
 def rotate_save(f, file_path):
     try:
