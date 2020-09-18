@@ -67,7 +67,7 @@ def index():
 def predict():     
     # Get the file from post request
     f = request.files['file']
-    image = Image.open(f)
+    #image = Image.open(f)
     # Save the file to ./uploads
     basepath = os.path.dirname(__file__)
     file_path = os.path.join(basepath, 'tmpimg', secure_filename(f.filename))
