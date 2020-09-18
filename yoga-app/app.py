@@ -15,7 +15,7 @@ from werkzeug.utils import secure_filename
 
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = "yogayogayoga"
+#app.config['SECRET_KEY'] = "yogayogayoga"
 #app.config['UPLOAD_FOLDER'] = os.environ['UPLOAD_FOLDER']
 
 def rotate_save(f, file_path):
@@ -49,9 +49,6 @@ def process_img(filename):
     return image_batch
 
 def get_category(img_path,model):
-    """
-    Uses an image and a model to return the names and the predictions of the top 3 classes
-    """
     im =  process_img(img_path)
     preds =  model.predict(im)
     top_3 = preds.argsort()[0][::-1][:3] # sort in reverse order and return top 3 indices
@@ -65,61 +62,34 @@ def index():
     # Main page
     if request.method == 'GET':
         return render_template('index.html')
-    
-    if request.method == 'POST':
-        image_file = request.files['image']
-        # if the file is "legit"
-        if image_file:
-            passed = False
-            try:
-                filename = image_file.filename
-                filepath = os.path.join('/tmpimg', filename)
-                image_file.save(filepath)
-                passed = True
-            except Exception:
-                passed = False
 
-            if passed:
-                return redirect(url_for('predict', filename=filename))
-            else:
-                flash('An error occurred, try again.')
-                return redirect(request.url)
-
-@app.route('/predict', methods=['GET'])
-def predict(filename):
-    image_url = url_for('images', filename=filename)
-    image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-    image_data = process_img(image_path)
-
-    predictions = get_category(image_data,model)
-    print(predictions)
-                
-        # # Get the file from post request
-        # f = request.files['file']
+@app.route('/predict', methods=['GET', 'POST'])
+def predict(filename):     
+    # Get the file from post request
+    f = request.files['file']
 
 
-        # # Save the file to ./uploads
-        # basepath = os.path.dirname(__file__)
-        # file_path = os.path.join(
-        #     basepath, 'uploads', secure_filename(f.filename))
-        # # f.save(file_path)
-        # rotate_save(f, file_path)
+    # Save the file to ./uploads
+    basepath = os.path.dirname(__file__)
+    file_path = os.path.join(
+        basepath, 'uploads', secure_filename(f.filename))
+    # f.save(file_path)
+    rotate_save(f, file_path)
 
-        # # Make prediction
-        # preds = model_predict(file_path, model)
+    # Make prediction
+    preds = get_category(file_path, model)
 
-        # # Delete it so we don't clutter our server up
-        # os.remove(file_path)
+    # Delete it so we don't clutter our server up
+    os.remove(file_path)
 
-    #     return preds
-    return predictions
+    return preds
 
 if __name__ == '__main__':
     #MODEL_PATH = 
     with open ('models/classes.pkl', 'rb') as f:
         class_names = np.array(pickle.load(f))
 
-    model = load_model('models/87.5_dog_mount_halfmoon_chair.h5')
+    model = load_model('models/88.5dmhc.h5')
     #model._make_predict_function()
     print('Model loaded. Start serving...')
 
