@@ -71,8 +71,8 @@ def predict():
     # Save the file to ./uploads
     basepath = os.path.dirname(__file__)
     file_path = os.path.join(basepath, 'tmping', secure_filename(f.filename))
-    #f.save(file_path)
-    rotate_save(f, file_path)
+    f.save(file_path)
+    #rotate_save(f, file_path)
 
     # Make prediction
     preds = get_category(file_path, model)
