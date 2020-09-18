@@ -74,6 +74,7 @@ def predict():
     #f.save(file_path)
     # breakpoint()
     # image=Image.open(f)
+    print(file_path)
     f.save(file_path)
     #rotate_save(f, file_path)
 
