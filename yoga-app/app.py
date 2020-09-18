@@ -66,14 +66,15 @@ def index():
 @app.route('/predict', methods=['GET', 'POST'])
 def predict():     
     # Get the file from post request
-    f = request.files['file']
+    f = Image.open(request.files['file'])
 
     # Save the file to ./uploads
     basepath = os.path.dirname(__file__)
-    file_path = os.path.join('/home/ubuntu/Get-Your-Asana-Mat/yoga-app', 'tmpimg', secure_filename(f.filename))
+    file_path = os.path.join(basepath, 'tmpimg', secure_filename(f.filename))
     #f.save(file_path)
-    image=Image.open(f)
-    image.save(file_path)
+    # breakpoint()
+    # image=Image.open(f)
+    f.save(file_path)
     #rotate_save(f, file_path)
 
     # Make prediction
