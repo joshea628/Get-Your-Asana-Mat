@@ -43,9 +43,6 @@ def rotate_save(f, file_path):
         pass
 
 def process_img(filename):
-    """
-    Loads image from filename, preprocesses it and expands the dimensions because the model predict function expects a batch of images, not one image
-    """
     original = load_img(filename, target_size = (299,299))
     numpy_image = preprocess_input( img_to_array(original))
     image_batch = np.expand_dims(numpy_image, axis =0)
@@ -63,27 +60,14 @@ def get_category(img_path,model):
     top_3_text = '<br>'.join([f'{name}: {percent:.2f}%' for name, percent in zip(top_3_names,top_3_percent)])
     return top_3_text
 
-@app.route('/', methods=['GET'])
+@app.route('/', methods=['GET', 'POST'])
 def index():
     # Main page
-    return render_template('index.html')
-
-
-@app.route('/predict', methods=['GET', 'POST'])
-def upload():
+    if request.method == 'GET':
+        return render_template('index.html')
+    
     if request.method == 'POST':
-        # check if a file was passed into the POST request
-        if 'image' not in request.files:
-            flash('No file was uploaded.')
-            return redirect(request.url)
-
         image_file = request.files['image']
-
-        # if filename is empty, then assume no upload
-        if image_file.filename == '':
-            flash('No file was uploaded.')
-            return redirect(request.url)
-
         # if the file is "legit"
         if image_file:
             passed = False
@@ -100,6 +84,14 @@ def upload():
             else:
                 flash('An error occurred, try again.')
                 return redirect(request.url)
+
+@app.route('/predict', methods=['GET'])
+def predict(filename):
+    image_url = url_for('images', filename=filename)
+    image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    image_data = process_img(image_path)
+
+    predictions = get_category(image_data,model)
                 
         # # Get the file from post request
         # f = request.files['file']
@@ -119,7 +111,7 @@ def upload():
         # os.remove(file_path)
 
     #     return preds
-    # return None
+    return predictions
 
 if __name__ == '__main__':
     #MODEL_PATH = 
