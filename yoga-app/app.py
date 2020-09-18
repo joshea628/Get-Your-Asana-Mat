@@ -58,8 +58,8 @@ def get_category(img_path,model):
     top_3 = preds.argsort()[0][::-1][:3] # sort in reverse order and return top 3 indices
     top_3_names = class_names[top_3]
     top_3_percent = preds[0][[top_3]]*100
-    #top_3_text = '<br>'.join([f'{name}: {percent:.2f}%' for name, percent in zip(top_3_names,top_3_percent)])
-    return top_3_names
+    top_3_text = '<br>'.join([f'{name}: {percent:.2f}%' for name, percent in zip(top_3_names,top_3_percent)])
+    return top_3_text
 
 @app.route('/', methods=['GET'])
 def index():
@@ -70,25 +70,54 @@ def index():
 @app.route('/predict', methods=['GET', 'POST'])
 def upload():
     if request.method == 'POST':
-        # Get the file from post request
-        f = request.files['file']
+        # check if a file was passed into the POST request
+        if 'image' not in request.files:
+            flash('No file was uploaded.')
+            return redirect(request.url)
+
+        image_file = request.files['image']
+
+        # if filename is empty, then assume no upload
+        if image_file.filename == '':
+            flash('No file was uploaded.')
+            return redirect(request.url)
+
+        # if the file is "legit"
+        if image_file:
+            passed = False
+            try:
+                filename = image_file.filename
+                filepath = os.path.join('/tmpimg', filename)
+                image_file.save(filepath)
+                passed = True
+            except Exception:
+                passed = False
+
+            if passed:
+                return redirect(url_for('predict', filename=filename))
+            else:
+                flash('An error occurred, try again.')
+                return redirect(request.url)
+                
+        # # Get the file from post request
+        # f = request.files['file']
 
 
-        # Save the file to ./uploads
-        basepath = os.path.dirname(__file__)
-        file_path = os.path.join(
-            basepath, 'uploads', secure_filename(f.filename))
-        # f.save(file_path)
-        rotate_save(f, file_path)
+        # # Save the file to ./uploads
+        # basepath = os.path.dirname(__file__)
+        # file_path = os.path.join(
+        #     basepath, 'uploads', secure_filename(f.filename))
+        # # f.save(file_path)
+        # rotate_save(f, file_path)
 
-        # Make prediction
-        preds = model_predict(file_path, model)
+        # # Make prediction
+        # preds = model_predict(file_path, model)
 
-        # Delete it so we don't clutter our server up
-        os.remove(file_path)
+        # # Delete it so we don't clutter our server up
+        # os.remove(file_path)
 
-        return preds
-    return None
+    #     return preds
+    # return None
 
 if __name__ == '__main__':
     #MODEL_PATH = 
