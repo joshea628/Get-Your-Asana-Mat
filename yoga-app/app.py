@@ -57,7 +57,7 @@ def get_category(img_path,model):
     top_3_text = '<br>'.join([f'{name}: {percent:.2f}%' for name, percent in zip(top_3_names,top_3_percent)])
     return top_3_text
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET'])
 def index():
     # Main page
     if request.method == 'GET':
@@ -70,7 +70,7 @@ def predict():
 
     # Save the file to ./uploads
     basepath = os.path.dirname(__file__)
-    file_path = os.path.join(basepath, 'tmping', secure_filename(f.filename))
+    file_path = os.path.join('/home/ubuntu/Get-Your-Asana-Mat/yoga-app', 'tmping', secure_filename(f.filename))
     f.save(file_path)
     #rotate_save(f, file_path)
 
