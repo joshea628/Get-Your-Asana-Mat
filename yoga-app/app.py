@@ -70,7 +70,7 @@ def predict():
 
     # Save the file to ./uploads
     basepath = os.path.dirname(__file__)
-    file_path = os.path.join('/home/ubuntu/Get-Your-Asana-Mat/yoga-app', 'tmping', secure_filename(f.filename))
+    file_path = os.path.join('/home/ubuntu/Get-Your-Asana-Mat/yoga-app', 'tmpimg', secure_filename(f.filename))
     f.save(file_path)
     #rotate_save(f, file_path)
 
