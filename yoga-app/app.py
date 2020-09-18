@@ -13,10 +13,11 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import img_to_array, load_img
 from werkzeug.utils import secure_filename
 
+UPLOAD_FOLDER = '/home/ubuntu/Get-Your-Asana-Mat/yoga-app/tmpimg'
 
 app = Flask(__name__)
 #app.config['SECRET_KEY'] = "yogayogayoga"
-#app.config['UPLOAD_FOLDER'] = os.environ['UPLOAD_FOLDER']
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 def rotate_save(f, file_path):
     try:
@@ -69,13 +70,15 @@ def predict():
     f = request.files['file']
     #image = Image.open(f)
     # Save the file to ./uploads
-    basepath = os.path.dirname(__file__)
-    file_path = os.path.join(basepath, 'tmpimg', secure_filename(f.filename))
+    #basepath = os.path.dirname(__file__)
+    filename = secure_filename(f.filename)
+    f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    #file_path = os.path.join(basepath, 'tmpimg', secure_filename(f.filename))
     #f.save(file_path)
     # breakpoint()
     # image=Image.open(f)
-    print(file_path)
-    f.save(file_path)
+    # print(file_path)
+    # f.save(file_path)
     #rotate_save(f, file_path)
 
     # Make prediction
