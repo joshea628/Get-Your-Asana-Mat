@@ -74,6 +74,8 @@ def predict():
     # Save the file to ./uploads
     #basepath = os.path.dirname(__file__)
     filename = secure_filename(f.filename)
+    print(f)
+    breakpoint()
     f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
     #file_path = os.path.join(basepath, 'tmpimg', secure_filename(f.filename))
     #f.save(file_path)
