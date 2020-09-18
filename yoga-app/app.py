@@ -66,7 +66,7 @@ def index():
 @app.route('/predict', methods=['GET', 'POST'])
 def predict():     
     # Get the file from post request
-    f = request.files['file'])
+    f = request.files['file']
     image = Image.open(f)
     # Save the file to ./uploads
     basepath = os.path.dirname(__file__)
