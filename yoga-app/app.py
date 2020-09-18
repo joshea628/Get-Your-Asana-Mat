@@ -15,6 +15,8 @@ from werkzeug.utils import secure_filename
 
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = "yogayogayoga"
+app.config['UPLOAD_FOLDER'] = os.environ['UPLOAD_FOLDER']
 
 def rotate_save(f, file_path):
     try:
