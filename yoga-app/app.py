@@ -92,6 +92,7 @@ def predict(filename):
     image_data = process_img(image_path)
 
     predictions = get_category(image_data,model)
+    print(predictions)
                 
         # # Get the file from post request
         # f = request.files['file']
