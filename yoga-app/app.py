@@ -68,12 +68,10 @@ def predict():
     # Get the file from post request
     f = request.files['file']
 
-
     # Save the file to ./uploads
     basepath = os.path.dirname(__file__)
-    file_path = os.path.join(
-        basepath, 'uploads', secure_filename(f.filename))
-    # f.save(file_path)
+    file_path = os.path.join(basepath, 'tmping', secure_filename(f.filename))
+    f.save(file_path)
     rotate_save(f, file_path)
 
     # Make prediction
