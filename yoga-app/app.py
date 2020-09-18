@@ -6,7 +6,7 @@ import sys
 import numpy as np
 import pandas as pd
 from PIL import Image, ExifTags
-from flask import Flask, redirect, render_template, request, url_for
+from flask import Flask, redirect, render_template, request, url_for, flash
 from gevent.pywsgi import WSGIServer
 from tensorflow.keras.applications.xception import preprocess_input
 from tensorflow.keras.models import load_model
