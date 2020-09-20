@@ -14,11 +14,10 @@ from tensorflow.keras.preprocessing.image import img_to_array, load_img
 from werkzeug.utils import secure_filename
 from os.path import join, dirname, realpath
 
-#UPLOADS_PATH =  '/home/ubuntu/anaconda3/envs/tensorflow2_latest_p37/lib/python3.7/site-packages/flask/static/temp'
-UPLOAD_FOLDER = '/home/ubuntu/Get-Your-Asana-Mat/yoga-app/static/temp'  # dirname(realpath(__file__))
+UPLOAD_FOLDER = '/home/ubuntu/Get-Your-Asana-Mat/yoga-app/static/temp' 
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 app = Flask(__name__)
-#app.config['SECRET_KEY'] = "yogayogayoga"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 def rotate_save(f, file_path):
@@ -68,22 +67,20 @@ def index():
 
 @app.route('/predict', methods=['GET', 'POST'])
 def predict():     
-
-    # Get the file from post request
-    file = request.files['file']
-    #image = Image.open(f)
-    # Save the file to ./uploads
-    #basepath = os.path.dirname(__file__)
-    filename = secure_filename(file.filename)
-    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-    #redir = redirect(url_for('uploaded_file',filename=filename))
-    #file_path = os.path.join(basepath, 'tmpimg', secure_filename(f.filename))
-    #f.save(file_path)
-    # breakpoint()
-    # image=Image.open(f)
-    # print(file_path)
-    # f.save(file_path)
-    #rotate_save(f, file_path)
+   if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        # if user does not select file, browser also
+        # submit a empty part without filename
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
     # Make prediction
     preds = get_category(file_path, model)
