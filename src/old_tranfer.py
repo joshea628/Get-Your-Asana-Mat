@@ -28,7 +28,6 @@ def create_transfer_model(input_size, n_categories, weights = 'imagenet', model=
                           classes=16)    
     mod = base_model.output
     mod = GlobalAveragePooling2D()(mod)
-    mod = Dropout(0.2)(mod)
     predictions = Dense(n_categories, activation='softmax')(mod)
     mod = Model(inputs=base_model.input, outputs=predictions)
     return mod
@@ -50,38 +49,39 @@ if __name__=='__main__':
     epochs = 100
     img_rows, img_cols = 299, 299
     input_shape = (img_rows, img_cols, 3)
-    training_images = 2009
-    testing_images = 894
-    steps_per_epoch = int(training_images/batch_size) + 1
-    validation_steps = int(testing_images/batch_size)+ 1
-    #load data
-    X = np.load('X_four299.npy')
-    y = np.load('y_four299.npy')
-    X = X.reshape(X.shape[0], 299, 299, 3)
-    #encode data to run through CNN
-    le = LabelEncoder()
-    le.fit(y)
-    y_encoded = le.transform(y)
-    #split data
-    X_train, X_test, y_train, y_test = train_test_split(X, y_encoded)
-    #create holdout
-    #X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.25, random_state=1)
-    y_train = to_categorical(y_train, num_classes=nb_classes)
-    y_test = to_categorical(y_test, nb_classes) 
-    #y_val = to_categorical(y_val, nb_classes) 
 
+    train_dg = ImageDataGenerator(preprocessing_function=preprocessing,
+                                                brightness_range=[0.2, 0.8],
+                                                zoom_range=0.1,
+                                                width_shift_range=0.1,
+                                                height_shift_range=0.1,
+                                                shear_range=0.1,
+                                                horizontal_flip=True,
+                                                rotation_range=5)
+    train_generator = train_dg.flow_from_directory('../data/training',
+                                                    target_size=(299,299),
+                                                    batch_size=batch_size,
+                                                    class_mode='categorical',
+                                                    shuffle=True)
+    test_dg = ImageDataGenerator(preprocessing_function=preprocessing)
+    test_generator = test_dg.flow_from_directory('../data/testing',
+                                                    target_size=(299,299),
+                                                    batch_size=batch_size,
+                                                    class_mode='categorical',
+                                                    shuffle=True)
+    
     transfer_model = create_transfer_model(input_shape, nb_classes)
     change_trainable_layers(transfer_model, 132)
     #print_model_properties(transfer_model)
     transfer_model.compile(optimizer=Adam(.001), loss=['categorical_crossentropy'], metrics=['accuracy'])
     mdl_check_trans = ModelCheckpoint(filepath='best_trans_model.hdf5', monitor='val_accuracy', 
                                         mode='max',save_best_only=True)
-    transfer_model.fit(x=X_train,y=y_train, 
+    transfer_model.fit(x=train_generator, 
                         epochs=epochs, 
                         steps_per_epoch=None, 
-                        validation_data=(X_test, y_test),
+                        validation_data=(test_generator),
                         validation_steps=None,
                         callbacks=[mdl_check_trans])
-    metrics = transfer_model.evaluate(x=X_test, y=y_test)
+    metrics = transfer_model.evaluate(x=test_generator)
     transfer_model.save('bestmodel.h5')
     print(metrics)

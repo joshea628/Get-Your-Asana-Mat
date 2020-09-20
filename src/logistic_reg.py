@@ -136,72 +136,86 @@ def con_matrix(y_hat, y_test, poses):
     plt.savefig('../images/confusion_matrix_3.png',  bbox_inches='tight')
     return cm
 
-#create canny filter flattened data for each pose
-all_poses = ['downdog','mountain','file_downdog','file_mountain']
-data, canny_data = process_data(all_poses)
-canny_downdog, canny_mountain = canny_data[0], canny_data[1]
-canny_file_downdog, canny_file_mountain = canny_data[2], canny_data[3]
-downdog_target = np.zeros((len(canny_downdog),1),dtype=int)
-file_downdog_target = np.zeros((len(canny_file_downdog),1),dtype=int)
-mountain_target= np.ones((len(canny_mountain),1),dtype=int)
-file_mountain_target = np.ones((len(canny_file_mountain),1),dtype=int)
+# #create canny filter flattened data for each pose
+# all_poses = ['downdog','mountain','file_downdog','file_mountain']
+# data, canny_data = process_data(all_poses)
+# canny_downdog, canny_mountain = canny_data[0], canny_data[1]
+# canny_file_downdog, canny_file_mountain = canny_data[2], canny_data[3]
+# downdog_target = np.zeros((len(canny_downdog),1),dtype=int)
+# file_downdog_target = np.zeros((len(canny_file_downdog),1),dtype=int)
+# mountain_target= np.ones((len(canny_mountain),1),dtype=int)
+# file_mountain_target = np.ones((len(canny_file_mountain),1),dtype=int)
 
-# #raw data combined
-raw_files = ['raw_downdog', 'raw_mountain', 'raw_file_downdog','raw_file_mountain']
-raw_data, canny_trash = process_data(raw_files, pickle=True)
-X_raw = np.concatenate((raw_data[0],raw_data[1],raw_data[2],raw_data[3]),axis=0)
+# # #raw data combined
+# raw_files = ['raw_downdog', 'raw_mountain', 'raw_file_downdog','raw_file_mountain']
+# raw_data, canny_trash = process_data(raw_files, pickle=True)
+# X_raw = np.concatenate((raw_data[0],raw_data[1],raw_data[2],raw_data[3]),axis=0)
 
-# #combine two poses into one dataset
-X = np.concatenate((canny_downdog, canny_mountain, 
-                        canny_file_downdog, canny_file_mountain), axis=0)
-targets = np.concatenate((downdog_target, mountain_target, 
-                            file_downdog_target, file_mountain_target), axis=0)
+# # #combine two poses into one dataset
+# X = np.concatenate((canny_downdog, canny_mountain, 
+#                         canny_file_downdog, canny_file_mountain), axis=0)
+# targets = np.concatenate((downdog_target, mountain_target, 
+#                             file_downdog_target, file_mountain_target), axis=0)
+# y = np.ravel(targets)
+# indeces = np.arange(len(X))
+
+down = np.load('downdog.npy',allow_pickle=False)
+mountain = np.load('mountain.npy',allow_pickle=False)
+
+down_canny = flatten_and_save_canny(down)
+mount = flatten_and_save_canny(mountain)
+downdog_target = np.zeros((len(down_canny),1),dtype=int)
+mountain_target= np.ones((len(mount),1),dtype=int)
+
+# # #combine two poses into one dataset
+X = np.concatenate((down_canny, mount), axis=0)
+targets = np.concatenate((downdog_target, mountain_target), axis=0)
 y = np.ravel(targets)
 indeces = np.arange(len(X))
 
+# # #featurize into two components using PCA
+pca = decomposition.PCA(n_components=3)
+X_pca = pca.fit_transform(X)
+
 #featurize into two components using PCA
 pca = decomposition.PCA(n_components=2)
-X_pca = pca.fit_transform(X)
-two_dim_pca(X_pca, y)
+X_pca2 = pca.fit_transform(X)
 
-#featurize into 3 components using PCA
-pca = decomposition.PCA(n_components=3)
-X_pca3 = pca.fit_transform(X)
-three_dim_pca(X_pca3, y)
+
 
 if __name__ == '__main__':
     #create train/test split with indeces for 2 features
-    X_tr2, X_te2, y_tr2, y_te2, idx_tr2, idx_te2 = train_test_split(X_pca,
+    X_tr2, X_te2, y_tr2, y_te2, idx_tr2, idx_te2 = train_test_split(X_pca2,
                                                                     y,indeces,
                                                                     random_state=0)
-    #create train/test split with indeces for 3 features    
-    X_tr3, X_te3, y_tr3, y_te3, idx_tr3, idx_te3 = train_test_split(X_pca3,
+    #create train/test split with indeces for 210 features    
+    X_tr, X_te, y_tr, y_te, idx_tr, idx_te = train_test_split(X_pca,
                                                                     y,indeces,
                                                                     random_state=0)
     #cross validation
     threshold = 0.53
     train_acc2, test_acc2 = crossVal(X_tr2, y_tr2, 5, 
                                         threshold=threshold)
-    train_acc3, test_acc3 = crossVal(X_tr3, y_tr3, 5, 
+    train_acc3, test_acc3 = crossVal(X_tr, y_tr, 5, 
                                         threshold=threshold)
     print(train_acc2, test_acc2)
     print(train_acc3, test_acc3)
     #ROC curves
     #we_will_roc_you(X_tr2, X_te2, y_tr2, y_te2)
-    we_will_roc_you(X_tr3, X_te3, y_tr3, y_te3)
+    we_will_roc_you(X_tr, X_te, y_tr, y_te)
     #logistic regression with 3 features:
     model = LogisticRegression()
-    model.fit(X_tr3,y_tr3)
-    probabilities = model.predict_proba(X_te3)[:,1]
+    model.fit(X_tr2,y_tr2)
+    probabilities = model.predict_proba(X_te2)[:,1]
     y_hat = (probabilities >= threshold).astype(int)
     print(y_hat)
-    print(y_te3)
+    print(y_te2)
     #overall accuracy
-    total_acc = accuracy_score(y_te3, y_hat)
+    total_acc = accuracy_score(y_te2, y_hat)
     print(total_acc)
     #confusion matrix
     poses = ['downdog', 'mountain']
-    con_matrix(y_te3, y_hat, poses)
+    con_matrix(y_te, y_hat, poses)
     #show incorrect positives
     # fig, ax = plt.subplots(1)
     # display = X_raw[430]

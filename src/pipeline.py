@@ -40,7 +40,7 @@ class ImageManipulation(object):
             try:
                 response = get(url)
                 image_bytes = io.BytesIO(response.content)
-                image = Image.open(image_bytes)
+                image = Image.open(image_bytes).convert('L')
                 self.image_array.append(image)
             except OSError:
                 print('image failed...') 
@@ -88,7 +88,7 @@ class ImageManipulation(object):
             image_vector = np.ravel(image_matrix)
             image_final.append(image_vector)
         np.save(self.pose, image_final)
-        print(f'Images saved as: {self.pose}.npy')
+        print(f'Images saved as: {self.pose}_grey.npy')
         return self 
 
     def save_images_color(self):
@@ -108,8 +108,9 @@ if __name__ == "__main__":
         process = ImageManipulation(path, 43, pose, URL=True)
         process.read_URL_images()
         # # process.greyscale()
-        #process.resize()
-        process.save_images_color()
+        process.resize()
+        process.save_images()
+        #process.save_images_color()
         
     files = ['file_downdog','file_mountain']
 
@@ -118,8 +119,9 @@ if __name__ == "__main__":
         process = ImageManipulation(directory, 43, fil)
         process.read_file_images()
         # #process.greyscale()
-        #process.resize()
-        process.save_images_color()
+        process.resize()
+        process.save_images()
+        #process.save_images_color()
 
 
     
