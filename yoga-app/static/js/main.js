@@ -71,7 +71,6 @@ var orientation = function(file, callback) {
 
           reader.onload = function (e) {
             orientation(input.files[0], function(base64img, value) {
-              // $('#imagePreview').attr('src', base64img);
 
               $('#imagePreview').css('background-image', 'url(' + e.target.result + ')');
             console.log(value)
@@ -85,8 +84,6 @@ var orientation = function(file, callback) {
                 $('#imagePreview').css('transform', rotation[1]);
               }
             });
-              // $('#imagePreview').css('background-image', 'url(' + e.target.result + ')');
-              // $('#imagePreview').css('transform',rotation[value]);
               $('#imagePreview').hide();
               $('#imagePreview').fadeIn(650);
 
