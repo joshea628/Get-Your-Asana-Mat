@@ -14,8 +14,8 @@ from tensorflow.keras.preprocessing.image import img_to_array, load_img
 from werkzeug.utils import secure_filename
 from os.path import join, dirname, realpath
 
-UPLOADS_PATH = join(dirname(realpath(__file__)), 'static/temp')
-#UPLOAD_FOLDER = '/home/ubuntu/Get-Your-Asana-Mat/yoga-app/tmpimg'
+UPLOADS_PATH = 'static/temp'
+#UPLOAD_FOLDER = '/home/ubuntu/Get-Your-Asana-Mat/yoga-app/tmpimg'   dirname(realpath(__file__))
 
 app = Flask(__name__)
 #app.config['SECRET_KEY'] = "yogayogayoga"
@@ -76,6 +76,7 @@ def predict():
     filename = secure_filename(f.filename)
     print(filename)
     f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    redir = redirect(url_for('uploaded_file',filename=filename))
     #file_path = os.path.join(basepath, 'tmpimg', secure_filename(f.filename))
     #f.save(file_path)
     # breakpoint()
@@ -90,7 +91,7 @@ def predict():
     # Delete it so we don't clutter our server up
     os.remove(file_path)
 
-    return preds
+    return redir, preds
 
 if __name__ == '__main__':
     #MODEL_PATH = 
