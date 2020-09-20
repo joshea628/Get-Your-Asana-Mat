@@ -19,7 +19,7 @@ img {
     height: 32vh;
     transform-origin: 50% 50%;
     background-size: contain;
-    image-orientation: from-image;
+    /* image-orientation: from-image; */
     background-repeat: no-repeat;
     background-position: center;
     /* MAX-WIDTH: 50%; */
