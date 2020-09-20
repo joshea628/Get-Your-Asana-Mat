@@ -59,6 +59,11 @@ def get_category(img_path,model):
     top_3_text = '<br>'.join([f'{name}: {percent:.2f}%' for name, percent in zip(top_3_names,top_3_percent)])
     return top_3_text
 
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
 @app.route('/', methods=['GET'])
 def index():
     # Main page
