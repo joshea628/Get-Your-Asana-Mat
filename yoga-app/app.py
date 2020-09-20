@@ -82,13 +82,13 @@ def predict():
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
-    # Make prediction
-    preds = get_category(file_path, model)
+            # Make prediction
+            preds = get_category(file_path, model)
 
-    # Delete it so we don't clutter our server up
-    os.remove(file_path)
+            # Delete it so we don't clutter our server up
+            os.remove(file_path)
 
-    return redir, preds
+    return preds
 
 if __name__ == '__main__':
     #MODEL_PATH = 
