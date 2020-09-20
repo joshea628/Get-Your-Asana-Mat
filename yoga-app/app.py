@@ -14,7 +14,7 @@ from tensorflow.keras.preprocessing.image import img_to_array, load_img
 from werkzeug.utils import secure_filename
 from os.path import join, dirname, realpath
 
-UPLOAD_FOLDER = '/home/ubuntu/Get-Your-Asana-Mat/yoga-app/static/temp' 
+UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'static/temp')
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 app = Flask(__name__)
