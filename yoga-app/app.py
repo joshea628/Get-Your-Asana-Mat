@@ -74,7 +74,7 @@ def predict():
         #image = Image.open(f)
         # Save the file to ./uploads
         #basepath = os.path.dirname(__file__)
-        filename = secure_filename(f.filename)
+        filename = secure_filename(file.filename)
         f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         #redir = redirect(url_for('uploaded_file',filename=filename))
         #file_path = os.path.join(basepath, 'tmpimg', secure_filename(f.filename))
