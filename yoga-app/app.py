@@ -25,7 +25,7 @@ def get_category(img_path,model):
     pred = model.predict(im)
     top_3 = pred.argsort()[0][::-1][:3]
     top_3_names = class_names[top_3]
-    top_3_percent = preds[0][[top_3]]*100
+    top_3_percent = pred[0][[top_3]]*100
     top_3_text = '<br>'.join([f'{name}: {percent:.2f}%' for name, percent in zip(top_3_names,top_3_percent)])
     return top_3_text
 
@@ -43,7 +43,7 @@ def predict():
             filename = secure_filename(file.filename)
             file.save(filename)
             # Make and display predictions
-            preds = get_category(secure_filename(file.filename), model)
+            preds = get_category(filename, model)
             os.remove(filename)
         return preds 
 
