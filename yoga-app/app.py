@@ -89,7 +89,7 @@ def predict():
             #file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             file.save(secure_filename(file.filename))
             # Make prediction
-            preds = get_category(file_path, model)
+            preds = get_category(secure_filename(file.filename), model)
 
             # Delete it so we don't clutter our server up
             #os.remove(file_path)
