@@ -24,12 +24,11 @@ def format(filename):
 def get_category(img_path,model):
     im = format(img_path)
     pred = model.predict(im)
-    classes = pred.argmax(axis=-1)
-    # top_2 = pred.argsort()[0][::-1][:3]
-    # top_2_names = class_names[top_2]
-    # top_2_percent = pred[0][[top_2]]*100
-    # top_2_text = '<br>'.join([f'{name}: {percent:.2f}%' for name, percent in zip(top_2_names,top_2_percent)])
-    return classes #top_2_text
+    top_2 = pred.argsort()[0][::-1][:3]
+    top_2_names = class_names[top_2]
+    top_2_percent = pred[0][[top_2]]*100
+    top_2_text = '<br>'.join([f'{name}: {percent:.2f}%' for name, percent in zip(top_2_names,top_2_percent)])
+    return top_2_text
 
 @app.route('/', methods=['GET'])
 def index():
@@ -44,7 +43,6 @@ def predict():
         if file.filename != '':
             filename = secure_filename(file.filename)
             file.save(filename)
-            # Make and display predictions
             preds = get_category(filename, model)
             os.remove(filename)
         return preds 
@@ -56,8 +54,5 @@ if __name__ == '__main__':
     model = load_model('models/88.5dmhc.h5')
     print('Model loaded. Start serving...')
 
-    #app.run(host='0.0.0.0',port=8105,debug=True)
-
-    # Serve the app with gevent
     http_server = WSGIServer(('0.0.0.0',8105), app)
     http_server.serve_forever()
