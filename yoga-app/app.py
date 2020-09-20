@@ -68,22 +68,22 @@ def index():
 
 @app.route('/predict', methods=['GET', 'POST'])
 def predict():     
-    # Get the file from post request
-    f = request.files['file']
-    #image = Image.open(f)
-    # Save the file to ./uploads
-    #basepath = os.path.dirname(__file__)
-    filename = secure_filename(f.filename)
-    print(filename)
-    f.save(os.path.join(app.config['UPLOAD_FOLDER'], name=filename))
-    #redir = redirect(url_for('uploaded_file',filename=filename))
-    #file_path = os.path.join(basepath, 'tmpimg', secure_filename(f.filename))
-    #f.save(file_path)
-    # breakpoint()
-    # image=Image.open(f)
-    # print(file_path)
-    # f.save(file_path)
-    #rotate_save(f, file_path)
+    if request.method == 'POST':
+        # Get the file from post request
+        file = request.files['file']
+        #image = Image.open(f)
+        # Save the file to ./uploads
+        #basepath = os.path.dirname(__file__)
+        filename = secure_filename(f.filename)
+        f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        #redir = redirect(url_for('uploaded_file',filename=filename))
+        #file_path = os.path.join(basepath, 'tmpimg', secure_filename(f.filename))
+        #f.save(file_path)
+        # breakpoint()
+        # image=Image.open(f)
+        # print(file_path)
+        # f.save(file_path)
+        #rotate_save(f, file_path)
 
     # Make prediction
     preds = get_category(file_path, model)
