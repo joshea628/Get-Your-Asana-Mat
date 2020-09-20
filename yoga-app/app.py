@@ -14,12 +14,12 @@ from tensorflow.keras.preprocessing.image import img_to_array, load_img
 from werkzeug.utils import secure_filename
 from os.path import join, dirname, realpath
 
-UPLOADS_PATH =  '/home/ubuntu/anaconda3/envs/tensorflow2_latest_p37/lib/python3.7/site-packages/flask/static/temp'
-#UPLOAD_FOLDER = '/home/ubuntu/Get-Your-Asana-Mat/yoga-app/tmpimg'   dirname(realpath(__file__))
+#UPLOADS_PATH =  '/home/ubuntu/anaconda3/envs/tensorflow2_latest_p37/lib/python3.7/site-packages/flask/static/temp'
+UPLOAD_FOLDER = '/home/ubuntu/Get-Your-Asana-Mat/yoga-app/static/temp'  # dirname(realpath(__file__))
 
 app = Flask(__name__)
 #app.config['SECRET_KEY'] = "yogayogayoga"
-app.config['UPLOAD_FOLDER'] = UPLOADS_PATH
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 def rotate_save(f, file_path):
     try:
@@ -75,8 +75,8 @@ def predict():
     #basepath = os.path.dirname(__file__)
     filename = secure_filename(f.filename)
     print(filename)
-    f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-    redir = redirect(url_for('uploaded_file',filename=filename))
+    f.save(os.path.join(app.config['UPLOAD_FOLDER'], name=filename))
+    #redir = redirect(url_for('uploaded_file',filename=filename))
     #file_path = os.path.join(basepath, 'tmpimg', secure_filename(f.filename))
     #f.save(file_path)
     # breakpoint()
