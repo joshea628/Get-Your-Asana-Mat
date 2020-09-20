@@ -14,7 +14,7 @@ from tensorflow.keras.preprocessing.image import img_to_array, load_img
 from werkzeug.utils import secure_filename
 from os.path import join, dirname, realpath
 
-UPLOADS_PATH = 'static/temp'
+UPLOADS_PATH =  '/home/ubuntu/anaconda3/envs/tensorflow2_latest_p37/lib/python3.7/site-packages/flask/static/temp'
 #UPLOAD_FOLDER = '/home/ubuntu/Get-Your-Asana-Mat/yoga-app/tmpimg'   dirname(realpath(__file__))
 
 app = Flask(__name__)
