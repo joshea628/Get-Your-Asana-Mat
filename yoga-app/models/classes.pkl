@@ -1,10 +1,10 @@
 (lp0
-S'Cow'
+S'Downward Facing Dog'
 p1
-aS'Downward Facing Dog'
+aS'Cow'
 p2
-aS'Mountain'
-p3
 aS'Halfmoon'
-p4
+p3
+aS
+p4'Mountain'
 a.
