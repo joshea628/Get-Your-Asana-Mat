@@ -1,7 +1,7 @@
 (lp0
-S'Downward Facing Dog'
+S'Cow'
 p1
-aS'Cow'
+aS'Downward Facing Dog'
 p2
 aS'Halfmoon'
 p3
