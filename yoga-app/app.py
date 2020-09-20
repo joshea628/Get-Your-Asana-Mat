@@ -28,7 +28,7 @@ def get_category(img_path,model):
     top_2_names = class_names[top_2]
     #top_2_percent = pred[0][[top_2]]*100
     #top_2_text = '<br>'.join([f'{name}: {percent:.2f}%' for name, percent in zip(top_2_names,top_2_percent)])
-    return f'{top_2}
+    return f'{top_2}'
 
 @app.route('/', methods=['GET'])
 def index():
