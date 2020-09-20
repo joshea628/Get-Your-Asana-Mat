@@ -5,6 +5,6 @@ aS'Cow'
 p2
 aS'Halfmoon'
 p3
-aS
-p4'Mountain'
+aS'Mountain'
+p4
 a.
