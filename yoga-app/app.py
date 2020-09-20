@@ -88,9 +88,8 @@ def predict():
             # Delete it so we don't clutter our server up
             os.remove(file_path)
 
-        return preds
-    return None 
-    
+        return preds 
+
 if __name__ == '__main__':
     #MODEL_PATH = 
     with open ('models/classes.pkl', 'rb') as f:
