@@ -23,7 +23,7 @@ def format(filename):
 def get_category(img_path,model):
     im = format(img_path)
     pred = model.predict(im)
-    top_2 = pred.argsort()[0][::-1][:2]
+    top_2 = pred.argsort()[0][::-1][:3]
     top_2_names = class_names[top_2]
     top_2_percent = pred[0][[top_2]]*100
     top_2_text = '<br>'.join([f'{name}: {percent:.2f}%' for name, percent in zip(top_2_names,top_2_percent)])
