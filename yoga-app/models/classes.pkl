@@ -1,10 +1,10 @@
 (lp0
-S'Chair'
+S'Cow'
 p1
 aS'Downward Facing Dog'
 p2
 aS'Mountain'
 p3
-aS'Plank'
+aS'Halfmoon'
 p4
 a.
