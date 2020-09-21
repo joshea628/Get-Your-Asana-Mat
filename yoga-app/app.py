@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-
 import os
 import pickle
 import sys
@@ -13,7 +12,6 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import img_to_array, load_img
 from werkzeug.utils import secure_filename
 
-
 app = Flask(__name__)
 
 def format(filename):
@@ -26,8 +24,6 @@ def get_category(img_path,model):
     pred = model.predict(im)
     top = pred.argsort()[0][::-1][:1]
     top_name = class_names[top][0]
-    #top_2_percent = pred[0][[top_2]]*100
-    #top_2_text = '<br>'.join([f'{name}: {percent:.2f}%' for name, percent in zip(top_2_names,top_2_percent)])
     return f'{top_name}'
 
 @app.route('/', methods=['GET'])
