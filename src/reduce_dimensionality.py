@@ -5,6 +5,7 @@ import matplotlib as mpl
 import itertools
 from sklearn.model_selection import KFold, train_test_split
 from feature_extraction_eda import flatten_and_save_canny
+import matplotlib.patches as mpatches
 
 plt.style.use('seaborn')
 mpl.rcParams['figure.dpi'] = 100
@@ -56,11 +57,18 @@ def two_dim_pca(X, y):
     '''
     Plots 2D PCA factors and saves image
     '''
-    fig, ax = plt.subplots(1)
-    ax.set_xlabel('Principal Component 1', fontsize = 15)
-    ax.set_ylabel('Principal Component 2', fontsize = 15)
-    ax.set_title('PCA with 2 Components', fontsize = 24)
-    ax.scatter(X[:,0], X[:,1], c=y,cmap='bwr_r')
+    fig, ax = plt.subplots(1, figsize=(12,8))
+    ax.set_xlabel('Principal Component 1', fontsize = 18)
+    ax.set_ylabel('Principal Component 2', fontsize = 18)
+    ax.set_title('PCA 2 Components and Canny Filter', fontsize = 24)
+    ax.scatter(X[:,0], X[:,1], c=y,cmap='bwr_r', alpha=0.6)
+    x= np.linspace(-3,6,10)
+    y=1.4286208 *(x**2) - 0.45887088 * x + 0.41275
+    #plt.plot(x,y,'-b', label='Decision Boundary')
+    plt.ylim(-2.5,6)
+    red = mpatches.Patch(color='red', label='Mountain')
+    blue = mpatches.Patch(color='blue', label='Downdog')
+    plt.legend(handles=[red, blue], fontsize=15)
     plt.savefig('../images/PCA_plot_2.png')
 
 def three_dim_pca(X, y):
@@ -85,8 +93,7 @@ def three_dim_pca(X, y):
         line.set_visible(False)
     plt.savefig('../images/PCA_plot_3.png')
 
-def autoencoder():
-    pass
+
 
 if __name__ == '__main__':
     #create canny filter flattened data for each pose
@@ -121,8 +128,8 @@ if __name__ == '__main__':
     # # #featurize into two components using PCA
     pca = decomposition.PCA(n_components=210)
     X_pca = pca.fit_transform(X)
-    # # two_dim_pca(X_pca, y)
-
+    two_dim_pca(X_pca, y)
+    plt.show()
     # # #featurize into 3 components using PCA
     # # pca = decomposition.PCA(n_components=2)
     # # X_pca2 = pca.fit_transform(X)

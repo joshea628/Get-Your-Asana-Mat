@@ -208,8 +208,7 @@ if __name__ == '__main__':
     model.fit(X_tr2,y_tr2)
     probabilities = model.predict_proba(X_te2)[:,1]
     y_hat = (probabilities >= threshold).astype(int)
-    print(y_hat)
-    print(y_te2)
+    print(model.coef_, model.intercept_)
     #overall accuracy
     total_acc = accuracy_score(y_te2, y_hat)
     print(total_acc)

@@ -10,11 +10,9 @@ from tensorflow.keras import Input
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.callbacks import TensorBoard, ModelCheckpoint
 import matplotlib.pyplot as plt
+from tensorflow.keras.preprocessing import ImageDataGenerator
 
-def create_transfer_model(input_size, n_categories, weights = 'imagenet', model=Xception):
-    """
-    Creates transfer learning model
-    """
+def transfer_model(input_size, n_categories, weights = 'imagenet', model=Xception):
     if model==Xception:
       base_model = model(weights=weights,
                           include_top=False,
@@ -42,14 +40,11 @@ def change_trainable_layers(model, trainable_index):
     for layer in model.layers[trainable_index:]:
         layer.trainable = True
 
-
 if __name__=='__main__':
     batch_size = 32  
     nb_classes = 4
     epochs = 100
-    img_rows, img_cols = 299, 299
-    input_shape = (img_rows, img_cols, 3)
-
+    input_shape = (299, 299, 3)
     train_dg = ImageDataGenerator(preprocessing_function=preprocessing,
                                                 brightness_range=[0.2, 0.8],
                                                 zoom_range=0.1,
@@ -70,7 +65,7 @@ if __name__=='__main__':
                                                     class_mode='categorical',
                                                     shuffle=True)
     
-    transfer_model = create_transfer_model(input_shape, nb_classes)
+    transfer_model = transfer_model(input_shape, nb_classes)
     change_trainable_layers(transfer_model, 132)
     #print_model_properties(transfer_model)
     transfer_model.compile(optimizer=Adam(.001), loss=['categorical_crossentropy'], metrics=['accuracy'])

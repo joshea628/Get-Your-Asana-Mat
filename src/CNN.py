@@ -8,6 +8,7 @@ from tensorflow.keras.utils import to_categorical
 import matplotlib as mpl
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 plt.style.use('seaborn')
 mpl.rcParams['figure.dpi'] = 100
@@ -17,7 +18,6 @@ def def_model(nb_filters, input_shape, kernel_size, pool_size):
     Returns base CNN model: 2 Layers using softmax and adam.
     '''
     model = Sequential()  
-    # Activation Function since this is a multi-classification problem, use softmax.
     model.add(Conv2D(nb_filters,
                      (kernel_size[0], kernel_size[1]),
                      padding='valid',input_shape=input_shape))
@@ -26,62 +26,48 @@ def def_model(nb_filters, input_shape, kernel_size, pool_size):
                      (kernel_size[0], kernel_size[1]),
                      padding='valid'))
     model.add(Activation('softmax'))
-    model.add(MaxPooling2D(pool_size=pool_size))  # decreases size, helps prevent overfitting
-    model.add(Dropout(0.5))  # zeros out some fraction of inputs, helps prevent overfitting
-    model.add(Flatten())  # necessary to flatten before going into conventional dense layer
-    model.add(Dense(32))  # (only) 32 neurons in this layer, really?
+    model.add(MaxPooling2D(pool_size=pool_size))  
+    model.add(Dropout(0.5))  
+    model.add(Flatten())
+    model.add(Dense(32))
     model.add(Activation('softmax'))
-    model.add(Dropout(0.5))  # zeros out some fraction of inputs, helps prevent overfitting
-    model.add(Dense(nb_classes))  # 16 final nodes (one for each class)
+    model.add(Dropout(0.5)) 
+    model.add(Dense(nb_classes))
     model.add(Activation('softmax'))
-    # optimizers to one of these: 'adam', 'adadelta', 'sgd'
     model.compile(loss='categorical_crossentropy',
                   optimizer='adam',
                   metrics=['accuracy'])
     return model
 
 if __name__=='__main__':
-    #load data
-    X = np.load('../data/X_four.npy')
-    y= np.load('../data/y_four.npy')
-    
-    #encode data as INTs to run through CNN
-    le = LabelEncoder()
-    le.fit(y)
-    y_encoded = le.transform(y)
-
-    # CNN parameters
-    batch_size = 32  # number of training samples used at a time to update the weights
-    nb_classes = 4    # number of output possibilities
-    nb_epoch = 3       # number of passes through the entire train dataset before weights "final"
-    img_rows, img_cols = 100, 100   # the size of the images
-    nb_filters = 16   # number of convolutional filters to use
-    pool_size = (2, 2)  # pooling decreases image size, reduces computation, adds translational invariance
-    kernel_size = (4, 4)  # convolutional kernel size, slides over image to learn features
-    input_shape = (img_rows, img_cols, 1)
-
-    #split data
-    X_train, X_test, y_train, y_test = train_test_split(X, y_encoded,random_state=0)
-    #create holdout
-    X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.25, random_state=1)
-    
-    #convert data for 2DCon
-    X_train = X_train.reshape(X_train.shape[0], img_rows, img_cols, 3)
-    X_test = X_test.reshape(X_test.shape[0], img_rows, img_cols, 3)
-    X_val = X_val.reshape(X_val.shape[0], img_rows, img_cols, 3)
-    X_train = X_train.astype('float32') # data was uint8 [0-255]
-    X_test = X_test.astype('float32')  # data was uint8 [0-255]
-    y_train = to_categorical(y_train, num_classes=nb_classes)
-    y_test = to_categorical(y_test, nb_classes) 
-    y_val = to_categorical(y_val, nb_classes) 
-
-    
+    batch_size = 32
+    nb_classes = 4
+    nb_epoch = 10 
+    nb_filters = 4  
+    pool_size = (2, 2) 
+    kernel_size = (4, 4)
+    input_shape = (299, 299, 3)
+    train_dg = ImageDataGenerator(brightness_range=[0.2, 0.8],
+                                                zoom_range=0.1,
+                                                width_shift_range=0.1,
+                                                height_shift_range=0.1,
+                                                shear_range=0.1,
+                                                horizontal_flip=True,
+                                                rotation_range=5)
+    train_generator = train_dg.flow_from_directory('../data/training',
+                                                    target_size=(299,299),
+                                                    batch_size=batch_size,
+                                                    class_mode='categorical',
+                                                    shuffle=True)
+    test_dg = ImageDataGenerator()
+    test_generator = test_dg.flow_from_directory('../data/testing',
+                                                    target_size=(299,299),
+                                                    batch_size=batch_size,
+                                                    class_mode='categorical',
+                                                    shuffle=True)    
     model = def_model(nb_filters, input_shape, kernel_size, pool_size)
-
-    # during fit process watch train and test error simultaneously
-    model.fit(X_train, y_train, batch_size=batch_size, epochs=nb_epoch, verbose=1, validation_data=(X_test, y_test))
-
-    score = model.evaluate(X_test, y_test, verbose=0)
+    model.fit(x=train_generator, batch_size=batch_size, epochs=nb_epoch, verbose=1, validation_data=(test_generator))
+    score = model.evaluate(x=test_generator, verbose=0)
     print('Test score:', score[0])
     print('Test accuracy:', score[1]) 
 
