@@ -10,6 +10,12 @@
 
 Yoga has been a huge part of my life, it's something that grounds me and has made me a more patient person. I hope to become a yoga teacher one day, and thought that a yoga pose classifier could be super useful for people learning yoga, who are not very familiar with pose names. The goal for this project is to add in the whole range of asanas, but will start with just 2 poses: mountain and downward dog to understand featurization, and slowly build up the models and pose range. 
 
+<div align="center">
+<p float="middle">
+    <img src="images/flowchart.png"/>
+</p>
+<div align="left">
+
 ## Data
 
 The images I'm using for this project have been found on the internet from a google search, and the rest of the images I collected from friends and classmates. 
@@ -24,7 +30,9 @@ Here is a sample of a few images included in my dataset:
 <div align="center">
 <p float="middle">
     <img src="images/frank.png" width="400" />
-    <img src="images/frank_grey.png" width="400" /> 
+    <img src="data/training/downdog/file206.jpeg" width="400" /> 
+    <img src="data/training/mountain/file42.jpeg" width="400" /> 
+    <img src="data/training/mountain/file10.jpeg" width="400" /> 
 </p>
 <div align="left">
 
@@ -104,6 +112,11 @@ In 3D, it looks like the poses separate a tiny bit more, but it's hard to tell i
 
 I decided to figure out the ideal number of PCA components as well, and decided to do this using a Scree Plot: 
 
+<div align="center">
+<p float="middle">
+    <img src="images/screevar.png" width="600" /> 
+</p>
+<div align="left">
 
 Turns out 3 components is actually the ideal number of components, so I decided to use 3 going forward.
 
@@ -241,3 +254,5 @@ In the future, I would like to expand the number of poses as well as try some ot
 ## Credits
 
 A special thanks to Frank Burkholder, Kayla Thomas, Chris Reger, Sam Silver, and Michael Dyer for their help and direction through this project. 
+
+Link to Google Slides presentation: https://docs.google.com/presentation/d/1z1LmAchpCE3Jjwi3VnDqC0R2fjTf-Dcsl-7nSEHNC7o/edit#slide=id.p 
