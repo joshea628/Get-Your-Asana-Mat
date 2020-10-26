@@ -116,16 +116,13 @@ if __name__=='__main__':
     X_train, X_test, y_train, y_test = train_test_split(X, y_encoded,random_state=0)
     # #create holdout
     X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.25, random_state=1)
-    # y_train = to_categorical(y_train, num_classes=nb_classes)
-    # y_test = to_categorical(y_test, nb_classes) 
-    # y_val = to_categorical(y_val, nb_classes) 
-    # trans = TransferModel(batch_size=batch_size, nb_classes=nb_classes, input_shape=input_shape, 
-    #                         training_images=training_images, testing_images=testing_images)
-    # trans.change_trainable_layers(132)
-    # trans.compile(optimizer=Adam(), learning_rate = 0.001, 
-    #                 loss=['categorical_crossentropy'], metrics=['accuracy']))
-    # trans.fit(X_train,y_train, X_test, y_test, epochs=epochs)
-    # metrics = trans.evaluate(X_test, y_test)
-    # print(metrics)
-
-    print(y_encoded)
+    y_train = to_categorical(y_train, num_classes=nb_classes)
+    y_test = to_categorical(y_test, nb_classes) 
+    y_val = to_categorical(y_val, nb_classes) 
+    trans = TransferModel(batch_size=batch_size, nb_classes=nb_classes, input_shape=input_shape, 
+                            training_images=training_images, testing_images=testing_images)
+    trans.change_trainable_layers(132)
+    trans.compile(optimizer=Adam(), learning_rate = 0.001, 
+                    loss=['categorical_crossentropy'], metrics=['accuracy']))
+    trans.fit(X_train,y_train, X_test, y_test, epochs=epochs)
+    metrics = trans.evaluate(X_test, y_test)

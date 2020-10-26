@@ -12,7 +12,7 @@ class ImageManipulation(object):
     input: path to image file (string)
     resolution: pixel size (int)
 
-    output:
+    output: NPY file of greyscaled and resized emails
 
     methods: greyscale, resize, convert_to_array
 
@@ -29,7 +29,7 @@ class ImageManipulation(object):
 
     def read_URL_images(self):
         '''
-        Reads in file and adds images to list
+        Reads images from URLS in a text file and converts them to greyscale
         '''
         with open(self.path) as f:
             self.image_list = f.readlines()
@@ -47,27 +47,17 @@ class ImageManipulation(object):
         return self  
     
     def read_file_images(self):
+        '''
+        Reads images from a file and converts them to greyscale
+        '''
         image_list = [f for f in os.listdir(self.path) if not f.startswith('.')]
         for filename in image_list:
             try:
-                im=Image.open(f'{self.path}/{filename}')
+                im=Image.open(f'{self.path}/{filename}').convert('L')
                 self.image_array.append(im)
             except OSError:
                 print('image failed...')
         return self
-
-    def greyscale(self):
-        '''
-        Converts image to greyscale
-        '''
-        if self.URL:
-            self._read_URL_images()
-        else:
-            self._read_file_images()
-        for image in self.image_array:
-            grey_image = image.convert('L')
-            self.image_grey.append(grey_image)
-        return self.image_array
 
     def resize(self):
         '''
@@ -82,22 +72,19 @@ class ImageManipulation(object):
         '''
         saves images as a numpy array and saves to data directory
         '''
+        if URL == True:
+            self.read_URL_images()
+            self.resize()
+        else:
+            self.read_file_images()
+            self.resize()
         image_final = []
         for image in self.image_resized:
             image_matrix = np.array(image)
             image_vector = np.ravel(image_matrix)
             image_final.append(image_vector)
-        np.save(self.pose, image_final)
-        print(f'Images saved as: {self.pose}_grey.npy')
-        return self 
-
-    def save_images_color(self):
-        image_final = []
-        for image in self.image_array:
-             image_matrix = np.array(image)
-             image_final.append(image_matrix)
-        np.save(f'raw_{self.pose}', image_final)
-        print(f'Images saved as: raw_{self.pose}.npy')
+        np.save('{self.pose}', image_final)
+        print(f'Images saved as: {self.pose}.npy')
         return self 
 
 if __name__ == "__main__":
@@ -106,23 +93,8 @@ if __name__ == "__main__":
     for pose in poses:
         path = f'../data/{pose}.txt'
         process = ImageManipulation(path, 43, pose, URL=True)
-        process.read_URL_images()
-        # # process.greyscale()
-        process.resize()
         process.save_images()
-        #process.save_images_color()
-        
-    files = ['file_downdog','file_mountain']
-
-    for fil in files:
-        directory = f'../images/{fil}'
-        process = ImageManipulation(directory, 43, fil)
-        process.read_file_images()
-        # #process.greyscale()
-        process.resize()
-        process.save_images()
-        #process.save_images_color()
-
-
+ 
+    
     
     

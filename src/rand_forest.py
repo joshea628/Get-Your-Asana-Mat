@@ -119,32 +119,14 @@ if __name__ == '__main__':
     #cross validation with RF model
     threshold=0.4
     train_acc, test_acc = crossVal(model_pca3, X_pca3, y, 5, threshold=threshold)
-    print(train_acc, test_acc)
     #fit RF model 
     model_pca3.fit(X_tr3, y_tr3)
     probabilities = model_pca3.predict_proba(X_te3)[:,1]
     y_hat = (probabilities >= threshold).astype(int)
-    print(y_hat)
-    print(y_te3)
     total_acc = accuracy_score(y_te3, y_hat)
-    print(total_acc)
     #ROC Curve
-    #we_will_roc_you(model_pca3, X_tr3, y_tr3, X_te3, y_te3)
+    we_will_roc_you(model_pca3, X_tr3, y_tr3, X_te3, y_te3)
     #confusion matrix
     poses = ['downdog', 'mountain']
-    #con_matrix(y_hat, y_te3, poses)
-    #plt.show()
-    print(len(y_te3))
-    #show incorrect positives
-    fig, ax = plt.subplots(1)
-    display = X_raw[461]
-    ax.imshow(display)
-    ax.set_axis_off()
-    plt.savefig('../images/actual_mountain_6.png')
-    plt.show()  
-    #model labeled mountain, actual downdog
-    #indeces [119,110,105]
-    print(idx_te3[118],idx_te3[109],idx_te3[104]) # 155, 171, 65
-    #model labeled downdog, actual mountain
-    #indeces [108, 107,104]
-    print(idx_te3[107],idx_te3[106],idx_te3[103]) # 445, 261, 461
+    con_matrix(y_hat, y_te3, poses)
+
