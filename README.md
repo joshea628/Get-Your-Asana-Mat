@@ -155,9 +155,10 @@ Here are some pictures that were incorrectly classified as mountain pose in both
 
 <div align="center">
 <p float="middle">
-    <img src="images/actual_downdog_1.png" width="400" /> 
-    <img src="images/actual_downdog_2.png" width="400" /> 
-    <img src="images/actual_downdog_3.png" width="400" /> 
+    <img src="images/wrong/actual_downdog_1.png" width="400" /> 
+    <img src="images/wrong/actual_downdog_2.png" width="400" /> 
+    <img src="images/wrong/canny1.png" width="400" /> 
+    <img src="images/wrong/canny2.png" width="400" /> 
 </p>
 <div align="left">
 
@@ -168,9 +169,10 @@ Here are some pictures that were incorrectly classified as downward dog as well 
 
 <div align="center">
 <p float="middle">
-    <img src="images/actual_mountain_1.png" width="400" /> 
-    <img src="images/actual_mountain_2.png" width="400" /> 
-    <img src="images/actual_mountain_3.png" width="400" /> 
+    <img src="images/wrong/actual_mountain_1.png" width="400" /> 
+    <img src="images/wrong/actual_mountain_2.png" width="400" /> 
+    <img src="images/wrong/canny4.png" width="400" />
+    <img src="images/wrong/canny5.png" width="400" /> 
 </p>
 <div align="left">
 
